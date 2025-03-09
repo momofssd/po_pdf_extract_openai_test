@@ -2,14 +2,22 @@ import streamlit as st
 import PyPDF2
 import json
 import re
-from openai import OpenAI
 import uuid  # Used to generate unique keys
 import time  # For implementing retries
 import logging  # For better error logging
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Import OpenAI with fallback handling
+try:
+    from openai import OpenAI
+    OPENAI_IMPORT_SUCCESS = True
+except ImportError:
+    OPENAI_IMPORT_SUCCESS = False
+    st.error("Failed to import OpenAI. Please check your installation.")
 
 # Set Streamlit Page Layout
 st.set_page_config(page_title="📄 LLM-Powered Purchase Order Extractor", layout="wide")
@@ -42,19 +50,59 @@ with st.sidebar:
         if not openai_api_key:
             st.error("❌ Please enter an API key.")
         else:
+            # Function to create OpenAI client with compatibility handling
+            def create_openai_client(api_key):
+                if not OPENAI_IMPORT_SUCCESS:
+                    return None, "OpenAI package not properly installed"
+                
+                try:
+                    # Set the API key as an environment variable (alternative approach)
+                    os.environ["OPENAI_API_KEY"] = api_key
+                    
+                    # Try to create client with minimal arguments
+                    return OpenAI(api_key=api_key), None
+                except TypeError as e:
+                    # Handle unexpected keyword arguments
+                    error_msg = str(e)
+                    logger.warning(f"Error creating OpenAI client: {error_msg}")
+                    
+                    if "unexpected keyword argument" in error_msg:
+                        # Try alternative initialization without the problematic argument
+                        try:
+                            return OpenAI(), None
+                        except Exception as e2:
+                            return None, f"Alternative client initialization failed: {str(e2)}"
+                    return None, error_msg
+                except Exception as e:
+                    return None, str(e)
+            
             # Function to validate API key with retries
             def validate_api_key(api_key, max_retries=3, retry_delay=1):
                 for attempt in range(max_retries):
                     try:
-                        # Create a client with minimal configuration
-                        client = OpenAI(api_key=api_key)
+                        # Create client with compatibility handling
+                        client, error = create_openai_client(api_key)
+                        if error:
+                            logger.warning(f"Client creation failed: {error}")
+                            return False, error
                         
-                        # Make a lightweight API call to validate the key
-                        # Use a simple models.list() call which is more reliable across environments
-                        models = client.models.list()
-                        # Just check if we got any models back
-                        if len(list(models)) > 0:
-                            return True, None
+                        # Simple validation - just try to list models
+                        try:
+                            # First try the v1 API style
+                            models = client.models.list()
+                            model_count = len(list(models))
+                            if model_count > 0:
+                                return True, None
+                        except AttributeError:
+                            # Fall back to older API style if needed
+                            try:
+                                models = client.models.list()
+                                if len(models.data) > 0:
+                                    return True, None
+                            except Exception as e:
+                                logger.warning(f"Model listing failed: {str(e)}")
+                                return False, str(e)
+                        
                         return False, "No models returned"
                     except Exception as e:
                         error_message = str(e)
@@ -71,7 +119,7 @@ with st.sidebar:
                             return False, error_message
                 return False, "Maximum retries exceeded"
             
-            # Validate the API key
+            # Validate the API key with improved error handling
             is_valid, error_message = validate_api_key(openai_api_key)
             
             if is_valid:
@@ -175,21 +223,59 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
             {"role": "user", "content": user_prompt},
         ]
 
-        # Function to call OpenAI API with retries
+        # Function to call OpenAI API with retries and version compatibility
         def call_openai_with_retry(api_key, messages, max_retries=3, retry_delay=2):
             for attempt in range(max_retries):
                 try:
-                    # Create client with minimal configuration
-                    client = OpenAI(api_key=api_key)
+                    # Create client with compatibility handling
+                    client, error = create_openai_client(api_key)
+                    if error:
+                        logger.warning(f"Client creation failed: {error}")
+                        # Don't retry for client creation errors
+                        return None, f"OpenAI client initialization error: {error}"
                     
-                    # Make API call
-                    response = client.chat.completions.create(
-                        model="gpt-4o",
-                        messages=messages,
-                        temperature=0,
-                        top_p=0.1
-                    )
-                    return response.choices[0].message.content, None
+                    # Make API call with error handling for different versions
+                    try:
+                        response = client.chat.completions.create(
+                            model="gpt-4o",
+                            messages=messages,
+                            temperature=0,
+                            top_p=0.1
+                        )
+                        
+                        # Handle different response formats
+                        try:
+                            # New API format
+                            return response.choices[0].message.content, None
+                        except AttributeError:
+                            # Older API format
+                            return response.choices[0].message["content"], None
+                            
+                    except Exception as api_e:
+                        error_msg = str(api_e)
+                        logger.warning(f"API call failed: {error_msg}")
+                        
+                        # Try fallback to GPT-3.5-turbo if GPT-4o is not available
+                        if "gpt-4o" in error_msg and "does not exist" in error_msg:
+                            try:
+                                st.warning("GPT-4o not available, falling back to GPT-3.5-turbo")
+                                response = client.chat.completions.create(
+                                    model="gpt-3.5-turbo",
+                                    messages=messages,
+                                    temperature=0,
+                                    top_p=0.1
+                                )
+                                try:
+                                    # New API format
+                                    return response.choices[0].message.content, None
+                                except AttributeError:
+                                    # Older API format
+                                    return response.choices[0].message["content"], None
+                            except Exception as fallback_e:
+                                return None, f"Fallback model also failed: {str(fallback_e)}"
+                        
+                        raise api_e  # Re-raise for retry handling
+                        
                 except Exception as e:
                     error_message = str(e)
                     logger.warning(f"OpenAI API call attempt {attempt+1} failed: {error_message}")
@@ -205,7 +291,7 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
                         return None, error_message
             return None, "Maximum retries exceeded"
         
-        # Call OpenAI API with retry mechanism
+        # Call OpenAI API with enhanced retry mechanism
         extract_contents, api_error = call_openai_with_retry(st.session_state.api_key, prompts)
         
         if extract_contents:
