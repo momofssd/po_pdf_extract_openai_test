@@ -2,22 +2,8 @@ import streamlit as st
 import PyPDF2
 import json
 import re
+from openai import OpenAI
 import uuid  # Used to generate unique keys
-import time  # For implementing retries
-import logging  # For better error logging
-import os
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-# Import OpenAI with fallback handling
-try:
-    from openai import OpenAI
-    OPENAI_IMPORT_SUCCESS = True
-except ImportError:
-    OPENAI_IMPORT_SUCCESS = False
-    st.error("Failed to import OpenAI. Please check your installation.")
 
 # Set Streamlit Page Layout
 st.set_page_config(page_title="📄 LLM-Powered Purchase Order Extractor", layout="wide")
@@ -27,8 +13,6 @@ if "uploaded_files_list" not in st.session_state:
     st.session_state.uploaded_files_list = []
 if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = str(uuid.uuid4())  # Unique key to force refresh
-if "api_key" not in st.session_state:
-    st.session_state.api_key = ""
 
 # Sidebar: API Key and File Upload
 with st.sidebar:
@@ -39,108 +23,17 @@ with st.sidebar:
         st.session_state.api_key_valid = False
 
     # User enters OpenAI API key
-    openai_api_key = st.text_input("Enter OpenAI API Key", type="password", value=st.session_state.api_key)
-    
-    # Update session state when API key changes
-    if openai_api_key != st.session_state.api_key:
-        st.session_state.api_key = openai_api_key
-        st.session_state.api_key_valid = False  # Reset validation when key changes
+    openai_api_key = st.text_input("Enter OpenAI API Key", type="password")
 
     if st.button("Validate API Key"):
-        if not openai_api_key:
-            st.error("❌ Please enter an API key.")
-        else:
-            # Function to create OpenAI client with compatibility handling
-            def create_openai_client(api_key):
-                if not OPENAI_IMPORT_SUCCESS:
-                    return None, "OpenAI package not properly installed"
-                
-                try:
-                    # Set the API key as an environment variable (alternative approach)
-                    os.environ["OPENAI_API_KEY"] = api_key
-                    
-                    # Try to create client with minimal arguments
-                    return OpenAI(api_key=api_key), None
-                except TypeError as e:
-                    # Handle unexpected keyword arguments
-                    error_msg = str(e)
-                    logger.warning(f"Error creating OpenAI client: {error_msg}")
-                    
-                    if "unexpected keyword argument" in error_msg:
-                        # Try alternative initialization without the problematic argument
-                        try:
-                            return OpenAI(), None
-                        except Exception as e2:
-                            return None, f"Alternative client initialization failed: {str(e2)}"
-                    return None, error_msg
-                except Exception as e:
-                    return None, str(e)
-            
-            # Function to validate API key with retries
-            def validate_api_key(api_key, max_retries=3, retry_delay=1):
-                for attempt in range(max_retries):
-                    try:
-                        # Create client with compatibility handling
-                        client, error = create_openai_client(api_key)
-                        if error:
-                            logger.warning(f"Client creation failed: {error}")
-                            return False, error
-                        
-                        # Simple validation - just try to list models
-                        try:
-                            # First try the v1 API style
-                            models = client.models.list()
-                            model_count = len(list(models))
-                            if model_count > 0:
-                                return True, None
-                        except AttributeError:
-                            # Fall back to older API style if needed
-                            try:
-                                models = client.models.list()
-                                if len(models.data) > 0:
-                                    return True, None
-                            except Exception as e:
-                                logger.warning(f"Model listing failed: {str(e)}")
-                                return False, str(e)
-                        
-                        return False, "No models returned"
-                    except Exception as e:
-                        error_message = str(e)
-                        logger.warning(f"API key validation attempt {attempt+1} failed: {error_message}")
-                        
-                        # Don't retry for authentication errors
-                        if "Unauthorized" in error_message or "Invalid API key" in error_message:
-                            return False, error_message
-                        
-                        # For other errors, retry after delay
-                        if attempt < max_retries - 1:
-                            time.sleep(retry_delay)
-                        else:
-                            return False, error_message
-                return False, "Maximum retries exceeded"
-            
-            # Validate the API key with improved error handling
-            is_valid, error_message = validate_api_key(openai_api_key)
-            
-            if is_valid:
-                # If successful, store the key and mark as valid
-                st.session_state.api_key = openai_api_key
-                st.session_state.api_key_valid = True
-                st.success("✅ API Key validated successfully!")
-            else:
-                st.session_state.api_key_valid = False
-                
-                if "unexpected keyword argument" in error_message:
-                    st.error("❌ OpenAI client initialization error. This may be due to a version mismatch.")
-                    st.info("If running locally, try: pip install --upgrade openai")
-                elif "Unauthorized" in error_message or "Invalid API key" in error_message:
-                    st.error("❌ Invalid API Key. Please check and try again.")
-                elif "Connection" in error_message or "timeout" in error_message.lower():
-                    st.error("❌ Connection error. This may be a temporary issue with the OpenAI API or network connectivity.")
-                    st.info("Please try again in a few moments.")
-                else:
-                    st.error(f"❌ Error validating API key: {error_message}")
-                    logger.error(f"Detailed validation error: {error_message}")
+        try:
+            client = OpenAI(api_key=openai_api_key)
+            client.models.list()
+            st.session_state.api_key_valid = True
+            st.success("✅ API Key validated successfully!")
+        except Exception as e:
+            st.session_state.api_key_valid = False
+            st.error("❌ Invalid API Key. Please try again.")
 
     # File uploader with dynamic key (forces reset)
     uploaded_files = st.file_uploader(
@@ -161,7 +54,6 @@ with st.sidebar:
         st.session_state.uploaded_files_list = []  # Clear stored files
         st.session_state.processed = False  # Reset processing state
         st.session_state.uploader_key = str(uuid.uuid4())  # Change uploader key to reset UI
-        # Keep API key and validation status
         st.rerun()  # Force full UI refresh
 
     # Process Button (Only appears when API key is valid and files exist)
@@ -223,78 +115,16 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
             {"role": "user", "content": user_prompt},
         ]
 
-        # Function to call OpenAI API with retries and version compatibility
-        def call_openai_with_retry(api_key, messages, max_retries=3, retry_delay=2):
-            for attempt in range(max_retries):
-                try:
-                    # Create client with compatibility handling
-                    client, error = create_openai_client(api_key)
-                    if error:
-                        logger.warning(f"Client creation failed: {error}")
-                        # Don't retry for client creation errors
-                        return None, f"OpenAI client initialization error: {error}"
-                    
-                    # Make API call with error handling for different versions
-                    try:
-                        response = client.chat.completions.create(
-                            model="gpt-4o",
-                            messages=messages,
-                            temperature=0,
-                            top_p=0.1
-                        )
-                        
-                        # Handle different response formats
-                        try:
-                            # New API format
-                            return response.choices[0].message.content, None
-                        except AttributeError:
-                            # Older API format
-                            return response.choices[0].message["content"], None
-                            
-                    except Exception as api_e:
-                        error_msg = str(api_e)
-                        logger.warning(f"API call failed: {error_msg}")
-                        
-                        # Try fallback to GPT-3.5-turbo if GPT-4o is not available
-                        if "gpt-4o" in error_msg and "does not exist" in error_msg:
-                            try:
-                                st.warning("GPT-4o not available, falling back to GPT-3.5-turbo")
-                                response = client.chat.completions.create(
-                                    model="gpt-3.5-turbo",
-                                    messages=messages,
-                                    temperature=0,
-                                    top_p=0.1
-                                )
-                                try:
-                                    # New API format
-                                    return response.choices[0].message.content, None
-                                except AttributeError:
-                                    # Older API format
-                                    return response.choices[0].message["content"], None
-                            except Exception as fallback_e:
-                                return None, f"Fallback model also failed: {str(fallback_e)}"
-                        
-                        raise api_e  # Re-raise for retry handling
-                        
-                except Exception as e:
-                    error_message = str(e)
-                    logger.warning(f"OpenAI API call attempt {attempt+1} failed: {error_message}")
-                    
-                    # Don't retry for authentication errors
-                    if "Unauthorized" in error_message or "Invalid API key" in error_message:
-                        return None, error_message
-                    
-                    # For other errors, retry after delay
-                    if attempt < max_retries - 1:
-                        time.sleep(retry_delay)
-                    else:
-                        return None, error_message
-            return None, "Maximum retries exceeded"
-        
-        # Call OpenAI API with enhanced retry mechanism
-        extract_contents, api_error = call_openai_with_retry(st.session_state.api_key, prompts)
-        
-        if extract_contents:
+        # Call OpenAI API
+        client = OpenAI(api_key=openai_api_key)
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=prompts,
+                temperature=0,
+                top_p=0.1
+            )
+            extract_contents = response.choices[0].message.content
 
             # Convert to JSON
             try:
@@ -306,10 +136,9 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
                 st.error(f"⚠ OpenAI returned invalid JSON for {pdf_file.name}")
                 st.text("Raw API Response:")
                 st.code(extract_contents, language="json")  # Show the invalid response for debugging
-        else:
-            # Handle API error
-            st.error(f"⚠ Error processing {pdf_file.name}: {api_error}")
-            logger.error(f"API error for {pdf_file.name}: {api_error}")
+
+        except Exception as e:
+            st.error(f"⚠ Error processing {pdf_file.name}: {e}")
 
     # Display extracted JSON results
     if extracted_data:
