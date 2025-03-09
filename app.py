@@ -86,7 +86,7 @@ system_message = (
     "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
     "\n- Material Number (Extract from the line item section, usually in the same row as 'Order Qty' and 'UOM')"
     "\n- Order Quantity in kg (only the converted kg value, do not include pounds or extra text, round to the nearest integer)"
-    "\n- Delivery Address (extract ONLY the 'SHIP TO' address, includes distribution name, ignore all other addresses including 'Vendor', 'Invoice', 'Billing', and any address containing 'PO Box')"
+    "\n- Delivery Address (extract ONLY the 'SHIP TO' address, includes distribution name if it is there, ignore all other addresses including 'Vendor', 'Invoice', 'Billing', and any address containing 'PO Box')"
     "\n\nIMPORTANT: "
     "- Return ONLY a valid JSON object. Do NOT include explanations, introductions, or Markdown formatting."
     "- Ensure 'Order Quantity in kg' is a clean number without thousand separators or extra text."
