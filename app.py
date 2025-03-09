@@ -81,7 +81,7 @@ def fix_number_format(text):
 system_message = (
     "You are an AI extracting relevant content from a purchase order. "
     "Find the following details and return ONLY a valid JSON object with these fields:"
-    "\n- Customer Name (Extract from the 'SHIP TO' section only)"
+    "\n- Customer Name (Look for terms and condition and header section)"
     "\n- Purchase Order Number"
     "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
     "\n- Material Number (Extract from the line item section, usually in the same row as 'Order Qty' and 'UOM')"
