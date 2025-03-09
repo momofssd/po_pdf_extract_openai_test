@@ -2,6 +2,8 @@
 
 A Streamlit-based web application for extracting and processing purchase order information from PDF documents. This application uses OpenAI's GPT-4o model to intelligently extract key information from purchase order PDFs and present it in a structured format.
 
+**Try the deployed application here: [https://poextrationopenai.streamlit.app/](https://poextrationopenai.streamlit.app/)**
+
 ## Overview
 
 This project consists of two main components:

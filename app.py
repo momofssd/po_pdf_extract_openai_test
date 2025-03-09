@@ -13,6 +13,8 @@ if "uploaded_files_list" not in st.session_state:
     st.session_state.uploaded_files_list = []
 if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = str(uuid.uuid4())  # Unique key to force refresh
+if "api_key" not in st.session_state:
+    st.session_state.api_key = ""
 
 # Sidebar: API Key and File Upload
 with st.sidebar:
@@ -23,17 +25,38 @@ with st.sidebar:
         st.session_state.api_key_valid = False
 
     # User enters OpenAI API key
-    openai_api_key = st.text_input("Enter OpenAI API Key", type="password")
+    openai_api_key = st.text_input("Enter OpenAI API Key", type="password", value=st.session_state.api_key)
+    
+    # Update session state when API key changes
+    if openai_api_key != st.session_state.api_key:
+        st.session_state.api_key = openai_api_key
+        st.session_state.api_key_valid = False  # Reset validation when key changes
 
     if st.button("Validate API Key"):
-        try:
-            client = OpenAI(api_key=openai_api_key)
-            client.models.list()
-            st.session_state.api_key_valid = True
-            st.success("✅ API Key validated successfully!")
-        except Exception as e:
-            st.session_state.api_key_valid = False
-            st.error("❌ Invalid API Key. Please try again.")
+        if not openai_api_key:
+            st.error("❌ Please enter an API key.")
+        else:
+            try:
+                # Create a client with the API key
+                client = OpenAI(api_key=openai_api_key)
+                
+                # Make a lightweight API call to validate the key
+                # Using models.retrieve is more efficient than models.list
+                client.models.retrieve("gpt-3.5-turbo")
+                
+                # If successful, store the key and mark as valid
+                st.session_state.api_key = openai_api_key
+                st.session_state.api_key_valid = True
+                st.success("✅ API Key validated successfully!")
+            except Exception as e:
+                st.session_state.api_key_valid = False
+                error_message = str(e)
+                if "Unauthorized" in error_message or "Invalid API key" in error_message:
+                    st.error("❌ Invalid API Key. Please check and try again.")
+                elif "Connection" in error_message:
+                    st.error("❌ Connection error. Please check your internet connection and try again.")
+                else:
+                    st.error(f"❌ Error validating API key: {error_message}")
 
     # File uploader with dynamic key (forces reset)
     uploaded_files = st.file_uploader(
@@ -54,6 +77,7 @@ with st.sidebar:
         st.session_state.uploaded_files_list = []  # Clear stored files
         st.session_state.processed = False  # Reset processing state
         st.session_state.uploader_key = str(uuid.uuid4())  # Change uploader key to reset UI
+        # Keep API key and validation status
         st.rerun()  # Force full UI refresh
 
     # Process Button (Only appears when API key is valid and files exist)
@@ -115,8 +139,8 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
             {"role": "user", "content": user_prompt},
         ]
 
-        # Call OpenAI API
-        client = OpenAI(api_key=openai_api_key)
+        # Call OpenAI API with the validated key from session state
+        client = OpenAI(api_key=st.session_state.api_key)
         try:
             response = client.chat.completions.create(
                 model="gpt-4o",
