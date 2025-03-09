@@ -4,6 +4,12 @@ import json
 import re
 from openai import OpenAI
 import uuid  # Used to generate unique keys
+import time  # For implementing retries
+import logging  # For better error logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # Set Streamlit Page Layout
 st.set_page_config(page_title="📄 LLM-Powered Purchase Order Extractor", layout="wide")
@@ -36,27 +42,57 @@ with st.sidebar:
         if not openai_api_key:
             st.error("❌ Please enter an API key.")
         else:
-            try:
-                # Create a client with the API key
-                client = OpenAI(api_key=openai_api_key)
-                
-                # Make a lightweight API call to validate the key
-                # Using models.retrieve is more efficient than models.list
-                client.models.retrieve("gpt-3.5-turbo")
-                
+            # Function to validate API key with retries
+            def validate_api_key(api_key, max_retries=3, retry_delay=1):
+                for attempt in range(max_retries):
+                    try:
+                        # Create a client with minimal configuration
+                        client = OpenAI(api_key=api_key)
+                        
+                        # Make a lightweight API call to validate the key
+                        # Use a simple models.list() call which is more reliable across environments
+                        models = client.models.list()
+                        # Just check if we got any models back
+                        if len(list(models)) > 0:
+                            return True, None
+                        return False, "No models returned"
+                    except Exception as e:
+                        error_message = str(e)
+                        logger.warning(f"API key validation attempt {attempt+1} failed: {error_message}")
+                        
+                        # Don't retry for authentication errors
+                        if "Unauthorized" in error_message or "Invalid API key" in error_message:
+                            return False, error_message
+                        
+                        # For other errors, retry after delay
+                        if attempt < max_retries - 1:
+                            time.sleep(retry_delay)
+                        else:
+                            return False, error_message
+                return False, "Maximum retries exceeded"
+            
+            # Validate the API key
+            is_valid, error_message = validate_api_key(openai_api_key)
+            
+            if is_valid:
                 # If successful, store the key and mark as valid
                 st.session_state.api_key = openai_api_key
                 st.session_state.api_key_valid = True
                 st.success("✅ API Key validated successfully!")
-            except Exception as e:
+            else:
                 st.session_state.api_key_valid = False
-                error_message = str(e)
-                if "Unauthorized" in error_message or "Invalid API key" in error_message:
+                
+                if "unexpected keyword argument" in error_message:
+                    st.error("❌ OpenAI client initialization error. This may be due to a version mismatch.")
+                    st.info("If running locally, try: pip install --upgrade openai")
+                elif "Unauthorized" in error_message or "Invalid API key" in error_message:
                     st.error("❌ Invalid API Key. Please check and try again.")
-                elif "Connection" in error_message:
-                    st.error("❌ Connection error. Please check your internet connection and try again.")
+                elif "Connection" in error_message or "timeout" in error_message.lower():
+                    st.error("❌ Connection error. This may be a temporary issue with the OpenAI API or network connectivity.")
+                    st.info("Please try again in a few moments.")
                 else:
                     st.error(f"❌ Error validating API key: {error_message}")
+                    logger.error(f"Detailed validation error: {error_message}")
 
     # File uploader with dynamic key (forces reset)
     uploaded_files = st.file_uploader(
@@ -139,16 +175,40 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
             {"role": "user", "content": user_prompt},
         ]
 
-        # Call OpenAI API with the validated key from session state
-        client = OpenAI(api_key=st.session_state.api_key)
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=prompts,
-                temperature=0,
-                top_p=0.1
-            )
-            extract_contents = response.choices[0].message.content
+        # Function to call OpenAI API with retries
+        def call_openai_with_retry(api_key, messages, max_retries=3, retry_delay=2):
+            for attempt in range(max_retries):
+                try:
+                    # Create client with minimal configuration
+                    client = OpenAI(api_key=api_key)
+                    
+                    # Make API call
+                    response = client.chat.completions.create(
+                        model="gpt-4o",
+                        messages=messages,
+                        temperature=0,
+                        top_p=0.1
+                    )
+                    return response.choices[0].message.content, None
+                except Exception as e:
+                    error_message = str(e)
+                    logger.warning(f"OpenAI API call attempt {attempt+1} failed: {error_message}")
+                    
+                    # Don't retry for authentication errors
+                    if "Unauthorized" in error_message or "Invalid API key" in error_message:
+                        return None, error_message
+                    
+                    # For other errors, retry after delay
+                    if attempt < max_retries - 1:
+                        time.sleep(retry_delay)
+                    else:
+                        return None, error_message
+            return None, "Maximum retries exceeded"
+        
+        # Call OpenAI API with retry mechanism
+        extract_contents, api_error = call_openai_with_retry(st.session_state.api_key, prompts)
+        
+        if extract_contents:
 
             # Convert to JSON
             try:
@@ -160,9 +220,10 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
                 st.error(f"⚠ OpenAI returned invalid JSON for {pdf_file.name}")
                 st.text("Raw API Response:")
                 st.code(extract_contents, language="json")  # Show the invalid response for debugging
-
-        except Exception as e:
-            st.error(f"⚠ Error processing {pdf_file.name}: {e}")
+        else:
+            # Handle API error
+            st.error(f"⚠ Error processing {pdf_file.name}: {api_error}")
+            logger.error(f"API error for {pdf_file.name}: {api_error}")
 
     # Display extracted JSON results
     if extracted_data:
