@@ -114,6 +114,14 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
             {"role": "system", "content": system_message},
             {"role": "user", "content": user_prompt},
         ]
+        prompts.append({
+            "role": "system",
+            "content": (
+                "Analyze the purchase order details provided. If the item section contains more than one item number, this indicates there are multiple purchase order lines. "
+                "In that case, extract and output each line separately as a JSON array, where each element represents a single purchase order line with all its details. "
+                "If there's only one line, output it as a single JSON object. Ensure that no line is omitted."
+            )
+        })
 
         # Call OpenAI API
         client = OpenAI(api_key=openai_api_key)
@@ -122,7 +130,7 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
                 model="gpt-4o",
                 messages=prompts,
                 temperature=0,
-                top_p=0.1
+                top_p=0
             )
             extract_contents = response.choices[0].message.content
 
