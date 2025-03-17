@@ -118,7 +118,7 @@ system_message = (
     "\n- Purchase Order Number"
     "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
     "\n- Material Number (Extract from the line item section, ignore `material description`,usually in the same row as 'Order Qty' and 'UOM')"
-    "\n- Order Quantity in kg (only the converted kg value, if the UOM is not specificied in kg or lb, consider it as kg, do not include pounds or extra text, round down to the nearest integer)"
+    "\n- Order Quantity in kg (only the converted kg value, do not include pounds or extra text, round to the nearest integer)"
     "\n- Delivery Address (extract ONLY the 'SHIP TO' address, includes distribution name if it is there, ignore all other addresses including 'Vendor', 'Invoice', 'Billing', and any address containing 'PO Box')"
     "\n\nIMPORTANT: "
     "- Return ONLY a valid JSON object. Do NOT include explanations, introductions, or Markdown formatting."
@@ -199,20 +199,47 @@ if st.session_state.get("extracted_data"):
     df = convert_to_dataframe(st.session_state.extracted_data)
     
     if not df.empty:
-        # Create Excel file in memory
-        output = io.BytesIO()
-        with pd.ExcelWriter(output, engine='openpyxl') as writer:
-            df.to_excel(writer, index=False, sheet_name='Purchase Orders')
+        # Create CSV file in memory (more reliable than Excel in Streamlit)
+        csv = df.to_csv(index=False)
         
-        # Create download button
-        excel_data = output.getvalue()
-        
+        # Create download button for CSV
         st.download_button(
-            label="📥 Download as Excel",
-            data=excel_data,
-            file_name="Purchase_Order_Data.xlsx",
-            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            label="📥 Download as CSV",
+            data=csv,
+            file_name="Purchase_Order_Data.csv",
+            mime="text/csv",
         )
+        
+        # Try to create Excel file if possible (with fallback)
+        try:
+            output = io.BytesIO()
+            
+            # Try different Excel engines
+            try:
+                # Try using xlsxwriter first (often available in Streamlit)
+                df.to_excel(output, engine='xlsxwriter', index=False, sheet_name='Purchase Orders')
+                excel_available = True
+            except ImportError:
+                try:
+                    # Try using openpyxl as fallback
+                    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Purchase Orders')
+                    excel_available = True
+                except ImportError:
+                    # If both fail, use basic Excel writer
+                    df.to_excel(output, index=False, sheet_name='Purchase Orders')
+                    excel_available = True
+            
+            # Create download button for Excel if available
+            if excel_available:
+                excel_data = output.getvalue()
+                st.download_button(
+                    label="📥 Download as Excel",
+                    data=excel_data,
+                    file_name="Purchase_Order_Data.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                )
+        except Exception as e:
+            st.info("Excel download not available. Please use CSV format.")
         
         # Also display as table
         st.subheader("📋 Data Preview")
