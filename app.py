@@ -121,9 +121,9 @@ system_message = (
     "You are an AI extracting relevant content from a purchase order. "
     "Find the following details and return ONLY a valid JSON object with these fields:"
     "\n- Customer Name (Look for terms and condition and header section)"
-    "\n- Purchase Order Number"
+    "\n- Purchase Order Number (it could have different naming convenstion such as `IMP`)"
     "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
-    "\n- Material Number (Extract from the line item section, ignore `material description`,usually in the same row as 'Order Qty' and 'UOM')"
+    "\n- Material Number (Extract from the line item section, ignore `material description`,usually in the same row as 'Order Qty' and 'UOM'),(it could have different naming convenstion such as `Our Ref`)"
     "\n- Order Quantity in kg (only the converted kg value, if the UOM is not specificied in kg or lb, consider it as kg, do not include pounds or extra text, round down to the nearest integer)"
     "\n- Delivery Address (extract ONLY the 'SHIP TO' address, includes distribution name if it is there, ignore all other addresses including 'Vendor', 'Invoice', 'Billing', and any address containing 'PO Box')"
     "\n\nIMPORTANT: "
@@ -134,6 +134,7 @@ system_message = (
     "- Ignore addresses related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing Address'."
     "- Ignore Material Number related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing "
     "- Ignore **Price per unit** label."
+   
 )
 
 # Processing Logic (Only runs when Process is clicked)
