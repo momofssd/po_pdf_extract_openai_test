@@ -85,7 +85,7 @@ system_message = (
     "\n- Purchase Order Number"
     "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
     "\n- Material Number (Extract from the line item section, ignore `material description`,usually in the same row as 'Order Qty' and 'UOM')"
-    "\n- Order Quantity in kg (only the converted kg value, if the UOM is not specificied in kg or lb, consider it as kg, do not include pounds or extra text, round to the nearest integer)"
+    "\n- Order Quantity in kg (only the converted kg value, if the UOM is not specificied in kg or lb, consider it as kg, do not include pounds or extra text, round down to the nearest integer)"
     "\n- Delivery Address (extract ONLY the 'SHIP TO' address, includes distribution name if it is there, ignore all other addresses including 'Vendor', 'Invoice', 'Billing', and any address containing 'PO Box')"
     "\n\nIMPORTANT: "
     "- Return ONLY a valid JSON object. Do NOT include explanations, introductions, or Markdown formatting."
@@ -96,7 +96,6 @@ system_message = (
     "- Ignore Material Number related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing "
     "- Ignore **Price per unit** label."
 )
-
 # Processing Logic (Only runs when Process is clicked)
 if st.session_state.api_key_valid and st.session_state.uploaded_files_list and st.session_state.processed:
     extracted_data = []

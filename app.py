@@ -2,8 +2,10 @@ import streamlit as st
 import PyPDF2
 import json
 import re
+import pandas as pd  # Added for Excel conversion
 from openai import OpenAI
 import uuid  # Used to generate unique keys
+import io  # Added for BytesIO operations
 
 # Set Streamlit Page Layout
 st.set_page_config(page_title="📄 LLM-Powered Purchase Order Extractor", layout="wide")
@@ -13,6 +15,8 @@ if "uploaded_files_list" not in st.session_state:
     st.session_state.uploaded_files_list = []
 if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = str(uuid.uuid4())  # Unique key to force refresh
+if "extracted_data" not in st.session_state:
+    st.session_state.extracted_data = []
 
 # Sidebar: API Key and File Upload
 with st.sidebar:
@@ -53,6 +57,7 @@ with st.sidebar:
     if st.button("Reset Files"):
         st.session_state.uploaded_files_list = []  # Clear stored files
         st.session_state.processed = False  # Reset processing state
+        st.session_state.extracted_data = []  # Clear extracted data
         st.session_state.uploader_key = str(uuid.uuid4())  # Change uploader key to reset UI
         st.rerun()  # Force full UI refresh
 
@@ -76,6 +81,34 @@ def extract_text_from_pdf(pdf_file):
 def fix_number_format(text):
     text = re.sub(r'(\d{1,3}),(\d{3}\.\d+)', r'\1\2', text)  # Convert "41,976.050" → "41976.050"
     return text
+
+# Function to convert extracted data to pandas DataFrame
+def convert_to_dataframe(extracted_data):
+    all_records = []
+    
+    for item in extracted_data:
+        filename = item['filename']
+        data = item['data']
+        
+        # Handle both single PO and multiple line items
+        if isinstance(data, list):
+            # Multiple line items
+            for line_item in data:
+                line_item['filename'] = filename
+                all_records.append(line_item)
+        else:
+            # Single PO
+            data['filename'] = filename
+            all_records.append(data)
+    
+    # Create DataFrame
+    if all_records:
+        df = pd.DataFrame(all_records)
+        # Reorder columns to put filename first
+        cols = ['filename'] + [col for col in df.columns if col != 'filename']
+        return df[cols]
+    else:
+        return pd.DataFrame()  # Empty DataFrame if no records
 
 # Define system message for OpenAI
 system_message = (
@@ -148,9 +181,41 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
         except Exception as e:
             st.error(f"⚠ Error processing {pdf_file.name}: {e}")
 
+    # Store extracted data in session state for later use
+    st.session_state.extracted_data = extracted_data
+
     # Display extracted JSON results
     if extracted_data:
         st.subheader("📊 Extracted Purchase Order Data")
         for item in extracted_data:
             st.write(f"📄 **File:** {item['filename']}")
             st.json(item['data'])
+
+# Excel Download Section (always visible if data exists)
+if st.session_state.get("extracted_data"):
+    st.subheader("📥 Download Data")
+    
+    # Convert extracted data to DataFrame
+    df = convert_to_dataframe(st.session_state.extracted_data)
+    
+    if not df.empty:
+        # Create Excel file in memory
+        output = io.BytesIO()
+        with pd.ExcelWriter(output, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False, sheet_name='Purchase Orders')
+        
+        # Create download button
+        excel_data = output.getvalue()
+        
+        st.download_button(
+            label="📥 Download as Excel",
+            data=excel_data,
+            file_name="Purchase_Order_Data.xlsx",
+            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        
+        # Also display as table
+        st.subheader("📋 Data Preview")
+        st.dataframe(df)
+    else:
+        st.info("No data available to download. Process files to extract data.")
