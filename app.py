@@ -95,10 +95,16 @@ def convert_to_dataframe(extracted_data):
             # Multiple line items
             for line_item in data:
                 line_item['filename'] = filename
+                # Fix delivery address formatting - replace newlines with spaces
+                if 'Delivery Address' in line_item:
+                    line_item['Delivery Address'] = line_item['Delivery Address'].replace('\n', ' ').replace('\r', ' ')
                 all_records.append(line_item)
         else:
             # Single PO
             data['filename'] = filename
+            # Fix delivery address formatting - replace newlines with spaces
+            if 'Delivery Address' in data:
+                data['Delivery Address'] = data['Delivery Address'].replace('\n', ' ').replace('\r', ' ')
             all_records.append(data)
     
     # Create DataFrame
@@ -118,7 +124,7 @@ system_message = (
     "\n- Purchase Order Number"
     "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
     "\n- Material Number (Extract from the line item section, ignore `material description`,usually in the same row as 'Order Qty' and 'UOM')"
-    "\n- Order Quantity in kg (only the converted kg value, do not include pounds or extra text, round to the nearest integer)"
+    "\n- Order Quantity in kg (only the converted kg value, if the UOM is not specificied in kg or lb, consider it as kg, do not include pounds or extra text, round down to the nearest integer)"
     "\n- Delivery Address (extract ONLY the 'SHIP TO' address, includes distribution name if it is there, ignore all other addresses including 'Vendor', 'Invoice', 'Billing', and any address containing 'PO Box')"
     "\n\nIMPORTANT: "
     "- Return ONLY a valid JSON object. Do NOT include explanations, introductions, or Markdown formatting."
@@ -153,6 +159,7 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
                 "Analyze the purchase order details provided. If the item section contains more than one item number, this indicates there are multiple purchase order lines. "
                 "In that case, extract and output each line separately as a JSON array, where each element represents a single purchase order line with all its details. "
                 "If there's only one line, output it as a single JSON object. Ensure that no line is omitted."
+                "\n\nIMPORTANT: Format the Delivery Address as a single line with spaces instead of line breaks."
             )
         })
 
@@ -172,6 +179,16 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
                 # Clean and validate JSON before parsing
                 extract_contents = extract_contents.strip().strip("```json").strip("```")
                 extract_contents_json = json.loads(extract_contents)
+                
+                # Process and fix any potential address formatting issues in the JSON
+                if isinstance(extract_contents_json, list):
+                    for item in extract_contents_json:
+                        if 'Delivery Address' in item:
+                            item['Delivery Address'] = item['Delivery Address'].replace('\n', ' ').replace('\r', ' ')
+                elif isinstance(extract_contents_json, dict):
+                    if 'Delivery Address' in extract_contents_json:
+                        extract_contents_json['Delivery Address'] = extract_contents_json['Delivery Address'].replace('\n', ' ').replace('\r', ' ')
+                
                 extracted_data.append({"filename": pdf_file.name, "data": extract_contents_json})
             except json.JSONDecodeError:
                 st.error(f"⚠ OpenAI returned invalid JSON for {pdf_file.name}")
