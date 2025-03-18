@@ -204,7 +204,7 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
 
     # Display extracted JSON results
     if extracted_data:
-        st.subheader("📊 Extracted Purchase Order Data")
+        st.subheader(" Extracted Purchase Order Data")
         for item in extracted_data:
             st.write(f"📄 **File:** {item['filename']}")
             st.json(item['data'])
@@ -222,7 +222,7 @@ if st.session_state.get("extracted_data"):
         
         # Create download button for CSV
         st.download_button(
-            label="📥 Download as CSV",
+            label=" Download as CSV",
             data=csv,
             file_name="Purchase_Order_Data.csv",
             mime="text/csv",
@@ -251,7 +251,7 @@ if st.session_state.get("extracted_data"):
             if excel_available:
                 excel_data = output.getvalue()
                 st.download_button(
-                    label="📥 Download as Excel",
+                    label=" Download as Excel",
                     data=excel_data,
                     file_name="Purchase_Order_Data.xlsx",
                     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -260,7 +260,7 @@ if st.session_state.get("extracted_data"):
             st.info("Excel download not available. Please use CSV format.")
         
         # Also display as table
-        st.subheader("📋 Data Preview")
+        st.subheader(" Data Preview")
         st.dataframe(df)
     else:
         st.info("No data available to download. Process files to extract data.")
