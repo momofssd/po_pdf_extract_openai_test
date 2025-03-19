@@ -6,6 +6,7 @@ import pandas as pd  # Added for Excel conversion
 from openai import OpenAI
 import uuid  # Used to generate unique keys
 import io  # Added for BytesIO operations
+from prompts import create_prompts  # Import the prompts module
 
 # Set Streamlit Page Layout
 st.set_page_config(page_title="📄 LLM-Powered Purchase Order Extractor", layout="wide")
@@ -17,6 +18,8 @@ if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = str(uuid.uuid4())  # Unique key to force refresh
 if "extracted_data" not in st.session_state:
     st.session_state.extracted_data = []
+if "edited_df" not in st.session_state:
+    st.session_state.edited_df = pd.DataFrame()
 
 # Sidebar: API Key and File Upload
 with st.sidebar:
@@ -58,6 +61,7 @@ with st.sidebar:
         st.session_state.uploaded_files_list = []  # Clear stored files
         st.session_state.processed = False  # Reset processing state
         st.session_state.extracted_data = []  # Clear extracted data
+        st.session_state.edited_df = pd.DataFrame()  # Clear edited dataframe
         st.session_state.uploader_key = str(uuid.uuid4())  # Change uploader key to reset UI
         st.rerun()  # Force full UI refresh
 
@@ -116,26 +120,23 @@ def convert_to_dataframe(extracted_data):
     else:
         return pd.DataFrame()  # Empty DataFrame if no records
 
-# Define system message for OpenAI
-system_message = (
-    "You are an AI extracting relevant content from a purchase order. "
-    "Find the following details and return ONLY a valid JSON object with these fields:"
-    "\n- Customer Name (Look for terms and condition and header section)"
-    "- Purchase Order Number"
-    "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
-    "\n- Material Number (Extract from the line item section, ignore `material description`,usually in the same row as 'Order Qty' and 'UOM'),(it could have different naming convenstion such as `Our Ref`)"
-    "\n- Order Quantity in kg (only the converted kg value, if the UOM is not specificied in kg or lb, consider it as kg, do not include pounds or extra text, round down to the nearest integer)"
-    "\n- Delivery Address (extract ONLY the 'SHIP TO' address, includes distribution name if it is there, ignore all other addresses including 'Vendor', 'Invoice', 'Billing', and any address containing 'PO Box')"
-    "\n\nIMPORTANT: "
-    "- Return ONLY a valid JSON object. Do NOT include explanations, introductions, or Markdown formatting."
-    "- Ensure 'Order Quantity in kg' is a clean number without thousand separators or extra text."
-    "- Ensure 'Required Delivery Date' follows ISO 8601 format (YYYY-MM-DD)."
-    "- Ensure 'Delivery Address' is the correct 'SHIP TO' address."
-    "- Ignore addresses related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing Address'."
-    "- Ignore Material Number related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing "
-    "- Ignore **Price per unit** label."
-   
-)
+# Function to update extracted_data from edited DataFrame
+def update_extracted_data_from_df(df):
+    # Group by filename to reconstruct the original structure
+    grouped = df.groupby('filename')
+    new_extracted_data = []
+    
+    for filename, group in grouped:
+        group_data = group.drop('filename', axis=1).to_dict('records')
+        
+        # If there's only one record for this filename, store it as a dict
+        # Otherwise, store as a list of dicts
+        if len(group_data) == 1:
+            new_extracted_data.append({"filename": filename, "data": group_data[0]})
+        else:
+            new_extracted_data.append({"filename": filename, "data": group_data})
+    
+    return new_extracted_data
 
 # Processing Logic (Only runs when Process is clicked)
 if st.session_state.api_key_valid and st.session_state.uploaded_files_list and st.session_state.processed:
@@ -148,21 +149,8 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
         pdf_text = extract_text_from_pdf(pdf_file)
         pdf_text = fix_number_format(pdf_text)
 
-        # Create prompt for OpenAI
-        user_prompt = f"Extract relevant details from the following purchase order:\n{pdf_text}"
-        prompts = [
-            {"role": "system", "content": system_message},
-            {"role": "user", "content": user_prompt},
-        ]
-        prompts.append({
-            "role": "system",
-            "content": (
-                "Analyze the purchase order details provided. If the item section contains more than one item number, this indicates there are multiple purchase order lines. "
-                "In that case, extract and output each line separately as a JSON array, where each element represents a single purchase order line with all its details. "
-                "If there's only one line, output it as a single JSON object. Ensure that no line is omitted."
-                "\n\nIMPORTANT: Format the Delivery Address as a single line with spaces instead of line breaks."
-            )
-        })
+        # Create prompts using the imported module
+        prompts = create_prompts(pdf_text)
 
         # Call OpenAI API
         client = OpenAI(api_key=openai_api_key)
@@ -209,16 +197,59 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
             st.write(f"📄 **File:** {item['filename']}")
             st.json(item['data'])
 
-# Excel Download Section (always visible if data exists)
+# Data Editing and Download Section (always visible if data exists)
 if st.session_state.get("extracted_data"):
-    st.subheader("📥 Download Data")
-    
     # Convert extracted data to DataFrame
     df = convert_to_dataframe(st.session_state.extracted_data)
     
     if not df.empty:
+        # Add data editing section
+        st.subheader("✏️ Edit Extracted Data")
+        
+        # Create a button to enter edit mode
+        if st.button("Edit Data"):
+            st.session_state.edit_mode = True
+            # Initialize edited_df in session state if it's empty
+            if st.session_state.edited_df.empty:
+                st.session_state.edited_df = df.copy()
+        
+        # Create a button to exit edit mode
+        if st.session_state.get("edit_mode", False):
+            if st.button("Exit Edit Mode"):
+                st.session_state.edit_mode = False
+                # Update the extracted_data with the edited values
+                st.session_state.extracted_data = update_extracted_data_from_df(st.session_state.edited_df)
+        
+        # Display editable dataframe when in edit mode
+        if st.session_state.get("edit_mode", False):
+            st.write("Make your changes directly in the table below. Click 'Exit Edit Mode' when finished.")
+            
+            # Use Streamlit's data editor to allow editing
+            edited_df = st.data_editor(
+                st.session_state.edited_df,
+                num_rows="dynamic",
+                key="edited_data",
+                use_container_width=True
+            )
+            
+            # Store the edited dataframe in session state
+            st.session_state.edited_df = edited_df
+            
+            # Use the edited dataframe for downloads
+            download_df = st.session_state.edited_df
+        else:
+            # Use the original dataframe for downloads and display
+            download_df = df
+            
+            # Display as table (non-editable)
+            st.subheader("📊 Data Preview")
+            st.dataframe(download_df)
+        
+        # Download section
+        st.subheader("📥 Download Data")
+        
         # Create CSV file in memory (more reliable than Excel in Streamlit)
-        csv = df.to_csv(index=False)
+        csv = download_df.to_csv(index=False)
         
         # Create download button for CSV
         st.download_button(
@@ -235,16 +266,16 @@ if st.session_state.get("extracted_data"):
             # Try different Excel engines
             try:
                 # Try using xlsxwriter first (often available in Streamlit)
-                df.to_excel(output, engine='xlsxwriter', index=False, sheet_name='Purchase Orders')
+                download_df.to_excel(output, engine='xlsxwriter', index=False, sheet_name='Purchase Orders')
                 excel_available = True
             except ImportError:
                 try:
                     # Try using openpyxl as fallback
-                    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Purchase Orders')
+                    download_df.to_excel(output, engine='openpyxl', index=False, sheet_name='Purchase Orders')
                     excel_available = True
                 except ImportError:
                     # If both fail, use basic Excel writer
-                    df.to_excel(output, index=False, sheet_name='Purchase Orders')
+                    download_df.to_excel(output, index=False, sheet_name='Purchase Orders')
                     excel_available = True
             
             # Create download button for Excel if available
@@ -258,9 +289,5 @@ if st.session_state.get("extracted_data"):
                 )
         except Exception as e:
             st.info("Excel download not available. Please use CSV format.")
-        
-        # Also display as table
-        st.subheader(" Data Preview")
-        st.dataframe(df)
     else:
         st.info("No data available to download. Process files to extract data.")
