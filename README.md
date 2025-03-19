@@ -6,10 +6,83 @@ A Streamlit-based web application for extracting and processing purchase order i
 
 ## Overview
 
-This project consists of two main components:
+This project has been modularized for better maintainability and consists of the following components:
 
-1. **openAI_extraction.py**: A backend script that handles PDF text extraction and OpenAI API integration
-2. **app.py**: A Streamlit frontend application that provides a user-friendly interface for the extraction process
+1. **app.py**: The main Streamlit application entry point
+2. **utils.py**: Utility functions for PDF processing and display
+3. **data_processing.py**: Functions for data transformation and handling
+4. **api.py**: OpenAI API integration
+5. **session_state.py**: Session state management
+6. **ui_components.py**: UI components and layout
+7. **processing.py**: Core processing logic
+8. **prompts.py**: Prompt engineering for OpenAI API
+
+## Application Structure
+
+The application follows a modular architecture for better maintainability:
+
+### Main Application (app.py)
+```python
+import streamlit as st
+from session_state import initialize_session_state
+from ui_components import create_sidebar, display_data_and_downloads, display_pdf_viewer
+from processing import process_files
+from api import validate_api_key
+
+# Set Streamlit Page Layout
+st.set_page_config(page_title="📄 LLM-Powered Purchase Order Extractor", layout="wide")
+
+# Initialize session state variables
+initialize_session_state()
+
+# Sidebar: API Key and File Upload
+openai_api_key, process_clicked = create_sidebar(validate_api_key)
+
+# Processing Logic (Only runs when Process is clicked)
+if st.session_state.api_key_valid and st.session_state.uploaded_files_list and st.session_state.processed:
+    # Process the files and store results in session state
+    extracted_data = process_files(st.session_state.uploaded_files_list, openai_api_key)
+    st.session_state.extracted_data = extracted_data
+
+# Display data and download options
+edited_df = display_data_and_downloads()
+
+# Display PDF viewer
+display_pdf_viewer(edited_df)
+```
+
+### Module Responsibilities
+
+1. **utils.py**: Contains utility functions for PDF text extraction, number formatting, and PDF display
+   - `extract_text_from_pdf()`: Extracts text from PDF files
+   - `fix_number_format()`: Standardizes number formats
+   - `save_pdf_for_display()`: Saves PDF bytes for later display
+   - `create_pdf_display_html()`: Creates HTML for PDF display
+
+2. **data_processing.py**: Handles data transformation and processing
+   - `convert_to_dataframe()`: Converts extracted data to pandas DataFrame
+   - `process_api_response()`: Processes and cleans API responses
+
+3. **api.py**: Manages OpenAI API interactions
+   - `validate_api_key()`: Validates the OpenAI API key
+   - `extract_data_from_text()`: Calls the OpenAI API with the provided text
+
+4. **session_state.py**: Manages Streamlit session state
+   - `initialize_session_state()`: Sets up initial session state variables
+   - `reset_session_state()`: Resets session state variables
+
+5. **ui_components.py**: Contains UI components and layout functions
+   - `create_sidebar()`: Creates the sidebar with API key input and file upload
+   - `display_data_and_downloads()`: Displays data and download options
+   - `display_pdf_viewer()`: Displays the PDF viewer
+
+6. **processing.py**: Contains the core processing logic
+   - `process_files()`: Processes uploaded files and extracts data
+
+7. **prompts.py**: Contains prompt engineering for OpenAI API
+   - `get_system_message()`: Returns the system message for the OpenAI API
+   - `get_multi_line_prompt()`: Returns the multi-line prompt for the OpenAI API
+   - `create_prompts()`: Creates the prompts for the OpenAI API
 
 ## How It Works: OpenAI-Powered Extraction
 
@@ -50,14 +123,13 @@ response = client.chat.completions.create(
     model="gpt-4o",
     messages=prompts,
     temperature=0,
-    top_p=0.1
+    top_p=0
 )
 ```
 
 - The preprocessed text is sent to OpenAI's GPT-4o model
 - A carefully crafted system prompt guides the model to extract specific fields
 - Temperature is set to 0 for deterministic outputs
-- Low top_p value (0.1) ensures high-precision responses
 
 ### 4. Information Extraction
 
@@ -82,7 +154,7 @@ except json.JSONDecodeError:
 - Validation ensures the extracted information is properly structured
 - Error handling manages cases where the model doesn't return valid JSON
 
-## Streamlit Frontend (app.py)
+## Streamlit Frontend Features
 
 The Streamlit application provides a user-friendly interface with the following features:
 
@@ -107,18 +179,9 @@ The Streamlit application provides a user-friendly interface with the following 
 ### 4. Results Display
 
 - Structured display of extracted information
-- JSON formatting for clear presentation
-- Error handling for invalid responses
-
-## Differences from Backend-Only Approach
-
-While openAI_extraction.py provides the core functionality, app.py enhances it with:
-
-1. **Interactive UI**: User-friendly interface for uploading files and viewing results
-2. **Multiple File Processing**: Support for batch processing multiple PDFs
-3. **Real-time Feedback**: Visual indicators of processing status and results
-4. **Error Handling**: Improved error messages and recovery options
-5. **Session Management**: Persistence of uploads and results during the session
+- Data editing capabilities
+- Export options for CSV and Excel
+- PDF viewer for reviewing source documents
 
 ## Prerequisites
 
@@ -126,6 +189,7 @@ While openAI_extraction.py provides the core functionality, app.py enhances it w
 - Streamlit
 - PyPDF2
 - OpenAI Python SDK
+- pandas
 - python-dotenv (for openAI_extraction.py)
 - Valid OpenAI API key with access to GPT-4o
 
@@ -207,3 +271,5 @@ To enhance the application:
 3. **Custom Extraction Rules**: Add support for different purchase order formats
 4. **Export Options**: Add functionality to export results as CSV, Excel, etc.
 5. **Batch Processing Improvements**: Add progress tracking for large batches
+6. **Additional Modules**: Create new modules for specific functionality
+7. **API Endpoints**: Add API endpoints for programmatic access
