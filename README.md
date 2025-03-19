@@ -25,7 +25,7 @@ The application follows a modular architecture for better maintainability:
 ```python
 import streamlit as st
 from session_state import initialize_session_state
-from ui_components import create_sidebar, display_data_and_downloads, display_pdf_viewer
+from ui_components import create_sidebar, display_data_and_downloads
 from processing import process_files
 from api import validate_api_key
 
@@ -47,17 +47,13 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
 # Display data and download options
 edited_df = display_data_and_downloads()
 
-# Display PDF viewer
-display_pdf_viewer(edited_df)
 ```
 
 ### Module Responsibilities
 
-1. **utils.py**: Contains utility functions for PDF text extraction, number formatting, and PDF display
+1. **utils.py**: Contains utility functions for PDF text extraction and number formatting
    - `extract_text_from_pdf()`: Extracts text from PDF files
    - `fix_number_format()`: Standardizes number formats
-   - `save_pdf_for_display()`: Saves PDF bytes for later display
-   - `create_pdf_display_html()`: Creates HTML for PDF display
 
 2. **data_processing.py**: Handles data transformation and processing
    - `convert_to_dataframe()`: Converts extracted data to pandas DataFrame
@@ -74,7 +70,6 @@ display_pdf_viewer(edited_df)
 5. **ui_components.py**: Contains UI components and layout functions
    - `create_sidebar()`: Creates the sidebar with API key input and file upload
    - `display_data_and_downloads()`: Displays data and download options
-   - `display_pdf_viewer()`: Displays the PDF viewer
 
 6. **processing.py**: Contains the core processing logic
    - `process_files()`: Processes uploaded files and extracts data
@@ -181,7 +176,6 @@ The Streamlit application provides a user-friendly interface with the following 
 - Structured display of extracted information
 - Data editing capabilities
 - Export options for CSV and Excel
-- PDF viewer for reviewing source documents
 
 ## Prerequisites
 

@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import io
-import base64
 from session_state import reset_session_state
 from data_processing import convert_to_dataframe
 
@@ -127,92 +126,3 @@ def display_data_and_downloads():
         else:
             st.info("No data available to download. Process files to extract data.")
             return None
-
-# Function to display PDF selector and viewer
-def display_pdf_viewer(dataframe):
-    if dataframe is not None:
-        # Create a selectbox to choose which PDF to view
-        st.write("### Select PDF to View")
-        
-        # Get unique filenames
-        unique_filenames = dataframe['filename'].unique().tolist()
-        
-        # Create a selectbox for PDF selection
-        if unique_filenames:
-            # Add a default "Select PDF" option
-            options = ["Select PDF"] + unique_filenames
-            selected_option = st.selectbox(
-                "Choose a PDF to view:",
-                options,
-                index=0,
-                key="pdf_selector"
-            )
-            
-            # Update selected PDF when a real PDF is selected (not the default option)
-            if selected_option != "Select PDF":
-                if not st.session_state.selected_row or st.session_state.selected_row['filename'] != selected_option:
-                    st.session_state.selected_row = {'filename': selected_option}
-                    st.rerun()
-            else:
-                # Clear selection if "Select PDF" is chosen
-                if st.session_state.selected_row:
-                    st.session_state.selected_row = None
-                    st.rerun()
-        
-        # Display the selected PDF if available
-        if st.session_state.selected_row and st.session_state.selected_row['filename'] in st.session_state.pdf_contents:
-            filename = st.session_state.selected_row['filename']
-            pdf_bytes = st.session_state.pdf_contents[filename]
-            
-            # Create an expander for the PDF
-            with st.expander(f"📄 PDF Preview: {filename}", expanded=True):
-                # Display PDF using PDF.js
-                # Create a temporary file to store the PDF
-                import tempfile
-                import os
-                
-                with tempfile.NamedTemporaryFile(delete=False, suffix='.pdf') as tmp_file:
-                    # Write PDF bytes to the temporary file
-                    tmp_file.write(pdf_bytes)
-                    tmp_file_path = tmp_file.name
-                
-                # Display the PDF using Streamlit
-                with open(tmp_file_path, "rb") as f:
-                    st.download_button(
-                        label="📥 Download PDF",
-                        data=f,
-                        file_name=filename,
-                        mime="application/pdf"
-                    )
-                    
-                # Use Streamlit's components.html for PDF display
-                st.write(f"### Viewing: {filename}")
-                
-                # Create a simple message about PDF viewing limitations
-                st.info("""
-                Due to browser security restrictions, embedded PDF viewing is not available in Streamlit Cloud.
-                Please use the download button above to view the PDF.
-                """)
-                
-                # Add a second download button with a more prominent style
-                st.markdown("""
-                <div style="text-align: center; margin: 20px 0;">
-                    <p style="font-size: 16px; margin-bottom: 10px;">Click the button below to view the PDF:</p>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # Add another download button
-                with open(tmp_file_path, "rb") as f:
-                    st.download_button(
-                        label="👁️ View PDF",
-                        data=f,
-                        file_name=filename,
-                        mime="application/pdf",
-                        key="view_pdf_button"
-                    )
-                
-                # Clean up the temporary file
-                try:
-                    os.unlink(tmp_file_path)
-                except:
-                    pass

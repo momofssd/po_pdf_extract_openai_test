@@ -1,6 +1,6 @@
 import streamlit as st
 from session_state import initialize_session_state
-from ui_components import create_sidebar, display_data_and_downloads, display_pdf_viewer
+from ui_components import create_sidebar, display_data_and_downloads
 from processing import process_files
 from api import validate_api_key
 
@@ -21,6 +21,3 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
 
 # Display data and download options
 edited_df = display_data_and_downloads()
-
-# Display PDF viewer
-display_pdf_viewer(edited_df)

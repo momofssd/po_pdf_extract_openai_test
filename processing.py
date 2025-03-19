@@ -1,5 +1,5 @@
 import streamlit as st
-from utils import extract_text_from_pdf, fix_number_format, save_pdf_for_display
+from utils import extract_text_from_pdf, fix_number_format
 from api import extract_data_from_text
 from data_processing import process_api_response
 from prompts import create_prompts
@@ -15,9 +15,6 @@ def process_files(uploaded_files, openai_api_key):
         for i, pdf_file in enumerate(uploaded_files):
             # Update progress bar
             progress_bar.progress((i + 0.5) / total_files)
-            
-            # Save PDF for later display
-            save_pdf_for_display(pdf_file)
             
             # Reset file pointer for text extraction
             pdf_file.seek(0)
