@@ -244,29 +244,38 @@ python openAI_extraction.py
 
 Note: The backend script is configured to process a specific file (4700414082.pdf). Modify the script to process different files.
 
-## System Prompt Details
+## System Architecture
 
-The system uses a carefully crafted prompt to guide the OpenAI model:
+The following diagram illustrates the end-to-end process flow of the application:
 
+```mermaid
+flowchart TD
+    A[PDF Purchase Order] --> B[Upload to Streamlit App]
+    B --> C[Extract Text from PDF]
+    C --> D[Preprocess Text]
+    D --> E[OpenAI GPT-4o Processing]
+    E --> F[JSON Response]
+    F --> G[Parse & Validate Data]
+    G --> H[Load Customer Master Data]
+    H --> I[Fuzzy Match Customer Name]
+    I --> J[Identify Customer Number]
+    J --> K[Fuzzy Match Delivery Address]
+    K --> L[Identify Ship-To Number]
+    L --> M[Create Structured DataFrame]
+    M --> N[Display in Streamlit UI]
+    N --> O[User Review & Edit]
+    O --> P[Export to Excel]
+    P --> Q[VBS Script for SAP Data Entry]
+    Q --> R[SAP ERP System]
+    
+    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style E fill:#eeeeee,stroke:#333,stroke-width:2px
+    style H fill:#d5e8d4,stroke:#333,stroke-width:2px
+    style P fill:#dae8fc,stroke:#333,stroke-width:2px
+    style R fill:#d5e8d4,stroke:#333,stroke-width:2px
 ```
-You are an AI extracting relevant content from a purchase order.
-Find the following details and return ONLY a valid JSON object with these fields:
-- Customer Name (Extract from the 'SHIP TO' section only)
-- Purchase Order Number
-- Required Delivery Date (convert to ISO format YYYY-MM-DD)
-- Material Number (Extract from the line item section)
-- Order Quantity in kg (only the converted kg value)
-- Delivery Address (extract ONLY the 'SHIP TO' address)
 
-IMPORTANT:
-- Return ONLY a valid JSON object
-- Ensure 'Order Quantity in kg' is a clean number
-- Ensure 'Required Delivery Date' follows ISO 8601 format
-- Ensure 'Delivery Address' is the correct 'SHIP TO' address
-- Ignore addresses related to 'Vendor', 'Invoice', 'Billing', etc.
-```
-
-This prompt ensures the model focuses on extracting the specific information needed in the correct format.
+This diagram shows how the system processes purchase orders from PDF upload through to SAP data entry, highlighting the key role of customer data matching and Excel export for VBS scripting.
 
 ## Customer Data Matching
 
