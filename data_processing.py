@@ -1,9 +1,13 @@
 import pandas as pd
 import streamlit as st
+from utils import load_customer_master_data, find_customer_number, find_ship_to_number
 
 # Function to convert extracted data to pandas DataFrame
 def convert_to_dataframe(extracted_data):
     all_records = []
+    
+    # Load customer master data
+    customer_master_data = load_customer_master_data()
     
     for item in extracted_data:
         filename = item['filename']
@@ -17,6 +21,26 @@ def convert_to_dataframe(extracted_data):
                 # Fix delivery address formatting - replace newlines with spaces
                 if 'Delivery Address' in line_item:
                     line_item['Delivery Address'] = line_item['Delivery Address'].replace('\n', ' ').replace('\r', ' ')
+                
+                # Add customer number and ship to number using fuzzy matching
+                if 'Customer Name' in line_item:
+                    customer_number, _ = find_customer_number(line_item['Customer Name'], customer_master_data)
+                    line_item['Customer Number'] = customer_number or ""
+                    
+                    # Find ship to number if customer number and delivery address are available
+                    if customer_number and 'Delivery Address' in line_item:
+                        ship_to_number = find_ship_to_number(
+                            customer_number, 
+                            line_item['Delivery Address'], 
+                            customer_master_data
+                        )
+                        line_item['Ship To Number'] = ship_to_number or ""
+                    else:
+                        line_item['Ship To Number'] = ""
+                else:
+                    line_item['Customer Number'] = ""
+                    line_item['Ship To Number'] = ""
+                
                 all_records.append(line_item)
         else:
             # Single PO
@@ -24,13 +48,35 @@ def convert_to_dataframe(extracted_data):
             # Fix delivery address formatting - replace newlines with spaces
             if 'Delivery Address' in data:
                 data['Delivery Address'] = data['Delivery Address'].replace('\n', ' ').replace('\r', ' ')
+            
+            # Add customer number and ship to number using fuzzy matching
+            if 'Customer Name' in data:
+                customer_number, _ = find_customer_number(data['Customer Name'], customer_master_data)
+                data['Customer Number'] = customer_number or ""
+                
+                # Find ship to number if customer number and delivery address are available
+                if customer_number and 'Delivery Address' in data:
+                    ship_to_number = find_ship_to_number(
+                        customer_number, 
+                        data['Delivery Address'], 
+                        customer_master_data
+                    )
+                    data['Ship To Number'] = ship_to_number or ""
+                else:
+                    data['Ship To Number'] = ""
+            else:
+                data['Customer Number'] = ""
+                data['Ship To Number'] = ""
+            
             all_records.append(data)
     
     # Create DataFrame
     if all_records:
         df = pd.DataFrame(all_records)
-        # Reorder columns to put filename first
-        cols = ['filename'] + [col for col in df.columns if col != 'filename']
+        # Reorder columns to put filename first, followed by customer number and ship to number
+        priority_cols = ['filename', 'Customer Number', 'Ship To Number']
+        other_cols = [col for col in df.columns if col not in priority_cols]
+        cols = priority_cols + other_cols
         return df[cols]
     else:
         return pd.DataFrame()  # Empty DataFrame if no records

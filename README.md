@@ -1,8 +1,20 @@
-# Streamlit PDF Purchase Order Extractor
+# Streamlit PDF Purchase Order Extractor for SAP Integration
 
-A Streamlit-based web application for extracting and processing purchase order information from PDF documents. This application uses OpenAI's GPT-4o model to intelligently extract key information from purchase order PDFs and present it in a structured format.
+A Streamlit-based web application for extracting and processing purchase order information from PDF documents. This application uses OpenAI's GPT-4o model to intelligently extract key information from purchase order PDFs, match it with customer master data, and export it in a format ready for SAP ERP data entry via VBS scripting.
 
 **Try the deployed application here: [https://poextrationopenai.streamlit.app/](https://poextrationopenai.streamlit.app/)**
+
+## Business Value
+
+This application streamlines the purchase order processing workflow by:
+
+1. **Eliminating Manual Data Entry**: Automatically extracts key information from PDF purchase orders
+2. **Enhancing Data Accuracy**: Uses fuzzy matching to correctly identify customer and ship-to information
+3. **Simplifying SAP Integration**: Exports data in Excel format ready for VBS scripting to perform data entry into SAP ERP
+4. **Reducing Technical Overhead**: No need to set up SAP endpoint programs or EDI connections
+5. **Empowering Business Users**: Allows internal business teams to operate this process without IT intervention
+
+The primary purpose of this tool is to bridge the gap between received PDF purchase orders and SAP ERP data entry, enabling a streamlined workflow that can be managed internally by business teams.
 
 ## Overview
 
@@ -256,14 +268,100 @@ IMPORTANT:
 
 This prompt ensures the model focuses on extracting the specific information needed in the correct format.
 
+## Customer Data Matching
+
+The application includes fuzzy matching capabilities to identify customer information:
+
+### 1. Customer Master Data
+
+The system uses a JSON file (`customer_master_data.json`) containing customer information:
+- Customer numbers
+- Customer names
+- Ship-to locations and their corresponding numbers
+
+### 2. Fuzzy Matching Process
+
+```python
+def find_customer_number(customer_name, customer_master_data):
+    # Create a dictionary mapping customer names to customer numbers
+    customer_dict = {data['customer_name']: cust_num for cust_num, data in customer_master_data.items()}
+    
+    # Use fuzzy matching to find the best match
+    best_match = process.extractOne(customer_name, customer_dict.keys())
+    
+    # If match score is above threshold
+    if best_match and best_match[1] >= 70:  # 70% match threshold
+        matched_customer_name = best_match[0]
+        customer_number = customer_dict[matched_customer_name]
+        return customer_number, matched_customer_name
+    
+    return None, None
+```
+
+- The system uses fuzzy string matching to compare extracted customer names with the master data
+- This handles variations, abbreviations, and minor differences in naming conventions
+- Once a customer is identified, the system can retrieve the appropriate ship-to information
+
+### 3. Ship-To Number Identification
+
+```python
+def find_ship_to_number(customer_number, delivery_address, customer_master_data):
+    # Get ship_to data for the customer
+    customer_data = customer_master_data.get(customer_number)
+    if not customer_data or 'ship_to' not in customer_data:
+        return None
+    
+    ship_to_dict = customer_data['ship_to']
+    
+    # Create a dictionary mapping addresses to ship_to numbers
+    address_dict = {address: ship_num for ship_num, address in ship_to_dict.items()}
+    
+    # Use fuzzy matching to find the best match
+    best_match = process.extractOne(delivery_address, address_dict.keys())
+    
+    # If match score is above threshold
+    if best_match and best_match[1] >= 60:  # 60% match threshold for addresses
+        matched_address = best_match[0]
+        return address_dict[matched_address]
+    
+    return None
+```
+
+- After identifying the customer, the system uses fuzzy matching to find the correct ship-to location
+- This enables accurate identification of the ship-to number required for SAP data entry
+
+## SAP Integration via Excel Export
+
+### Purpose of Excel Export
+
+The primary purpose of exporting data to Excel is to facilitate SAP ERP data entry through VBS scripting:
+
+1. **VBS Scripting Integration**: The exported Excel file is structured to be compatible with VBS scripts that automate data entry into SAP
+2. **No Direct SAP Connection Required**: This approach eliminates the need for complex SAP endpoint programming or EDI connections
+3. **Business User Empowerment**: Non-technical users can run the process end-to-end without IT support
+
+### Excel Export Format
+
+The Excel export includes all extracted fields plus the matched customer and ship-to information:
+- Customer Number (matched from master data)
+- Ship To Number (matched from master data)
+- Purchase Order Number
+- Required Delivery Date
+- Material Number
+- Order Quantity
+- Other extracted fields
+
+This format provides all the necessary information for VBS scripts to perform automated data entry into SAP.
+
 ## Extending the Application
 
-To enhance the application:
+To further enhance the application:
 
 1. **Add Authentication**: Implement user authentication for secure access
-2. **Database Integration**: Store extracted information in a database
+2. **Database Integration**: Store extracted information and processing history
 3. **Custom Extraction Rules**: Add support for different purchase order formats
-4. **Export Options**: Add functionality to export results as CSV, Excel, etc.
+4. **Enhanced SAP Integration**: Develop more sophisticated VBS scripts for complex SAP transactions
 5. **Batch Processing Improvements**: Add progress tracking for large batches
-6. **Additional Modules**: Create new modules for specific functionality
-7. **API Endpoints**: Add API endpoints for programmatic access
+6. **Additional Master Data**: Expand master data matching to include materials, pricing, etc.
+7. **Validation Rules**: Implement business rules to validate extracted data before SAP entry
+8. **Approval Workflow**: Add approval steps before data is exported for SAP entry
