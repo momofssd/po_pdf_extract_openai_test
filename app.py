@@ -18,8 +18,6 @@ if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = str(uuid.uuid4())  # Unique key to force refresh
 if "extracted_data" not in st.session_state:
     st.session_state.extracted_data = []
-if "edited_df" not in st.session_state:
-    st.session_state.edited_df = pd.DataFrame()
 
 # Sidebar: API Key and File Upload
 with st.sidebar:
@@ -61,7 +59,6 @@ with st.sidebar:
         st.session_state.uploaded_files_list = []  # Clear stored files
         st.session_state.processed = False  # Reset processing state
         st.session_state.extracted_data = []  # Clear extracted data
-        st.session_state.edited_df = pd.DataFrame()  # Clear edited dataframe
         st.session_state.uploader_key = str(uuid.uuid4())  # Change uploader key to reset UI
         st.rerun()  # Force full UI refresh
 
@@ -119,24 +116,6 @@ def convert_to_dataframe(extracted_data):
         return df[cols]
     else:
         return pd.DataFrame()  # Empty DataFrame if no records
-
-# Function to update extracted_data from edited DataFrame
-def update_extracted_data_from_df(df):
-    # Group by filename to reconstruct the original structure
-    grouped = df.groupby('filename')
-    new_extracted_data = []
-    
-    for filename, group in grouped:
-        group_data = group.drop('filename', axis=1).to_dict('records')
-        
-        # If there's only one record for this filename, store it as a dict
-        # Otherwise, store as a list of dicts
-        if len(group_data) == 1:
-            new_extracted_data.append({"filename": filename, "data": group_data[0]})
-        else:
-            new_extracted_data.append({"filename": filename, "data": group_data})
-    
-    return new_extracted_data
 
 # Processing Logic (Only runs when Process is clicked)
 if st.session_state.api_key_valid and st.session_state.uploaded_files_list and st.session_state.processed:
@@ -197,59 +176,16 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
             st.write(f"📄 **File:** {item['filename']}")
             st.json(item['data'])
 
-# Data Editing and Download Section (always visible if data exists)
+# Excel Download Section (always visible if data exists)
 if st.session_state.get("extracted_data"):
+    st.subheader("📥 Download Data")
+    
     # Convert extracted data to DataFrame
     df = convert_to_dataframe(st.session_state.extracted_data)
     
     if not df.empty:
-        # Add data editing section
-        st.subheader("✏️ Edit Extracted Data")
-        
-        # Create a button to enter edit mode
-        if st.button("Edit Data"):
-            st.session_state.edit_mode = True
-            # Initialize edited_df in session state if it's empty
-            if st.session_state.edited_df.empty:
-                st.session_state.edited_df = df.copy()
-        
-        # Create a button to exit edit mode
-        if st.session_state.get("edit_mode", False):
-            if st.button("Exit Edit Mode"):
-                st.session_state.edit_mode = False
-                # Update the extracted_data with the edited values
-                st.session_state.extracted_data = update_extracted_data_from_df(st.session_state.edited_df)
-        
-        # Display editable dataframe when in edit mode
-        if st.session_state.get("edit_mode", False):
-            st.write("Make your changes directly in the table below. Click 'Exit Edit Mode' when finished.")
-            
-            # Use Streamlit's data editor to allow editing
-            edited_df = st.data_editor(
-                st.session_state.edited_df,
-                num_rows="dynamic",
-                key="edited_data",
-                use_container_width=True
-            )
-            
-            # Store the edited dataframe in session state
-            st.session_state.edited_df = edited_df
-            
-            # Use the edited dataframe for downloads
-            download_df = st.session_state.edited_df
-        else:
-            # Use the original dataframe for downloads and display
-            download_df = df
-            
-            # Display as table (non-editable)
-            st.subheader("📊 Data Preview")
-            st.dataframe(download_df)
-        
-        # Download section
-        st.subheader("📥 Download Data")
-        
         # Create CSV file in memory (more reliable than Excel in Streamlit)
-        csv = download_df.to_csv(index=False)
+        csv = df.to_csv(index=False)
         
         # Create download button for CSV
         st.download_button(
@@ -266,16 +202,16 @@ if st.session_state.get("extracted_data"):
             # Try different Excel engines
             try:
                 # Try using xlsxwriter first (often available in Streamlit)
-                download_df.to_excel(output, engine='xlsxwriter', index=False, sheet_name='Purchase Orders')
+                df.to_excel(output, engine='xlsxwriter', index=False, sheet_name='Purchase Orders')
                 excel_available = True
             except ImportError:
                 try:
                     # Try using openpyxl as fallback
-                    download_df.to_excel(output, engine='openpyxl', index=False, sheet_name='Purchase Orders')
+                    df.to_excel(output, engine='openpyxl', index=False, sheet_name='Purchase Orders')
                     excel_available = True
                 except ImportError:
                     # If both fail, use basic Excel writer
-                    download_df.to_excel(output, index=False, sheet_name='Purchase Orders')
+                    df.to_excel(output, index=False, sheet_name='Purchase Orders')
                     excel_available = True
             
             # Create download button for Excel if available
@@ -289,5 +225,9 @@ if st.session_state.get("extracted_data"):
                 )
         except Exception as e:
             st.info("Excel download not available. Please use CSV format.")
+        
+        # Also display as table
+        st.subheader(" Data Preview")
+        st.dataframe(df)
     else:
         st.info("No data available to download. Process files to extract data.")
