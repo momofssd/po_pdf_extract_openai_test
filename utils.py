@@ -29,36 +29,9 @@ def save_pdf_for_display(pdf_file):
     st.session_state.pdf_contents[pdf_file.name] = pdf_bytes
     return pdf_bytes
 
-# Function to create PDF display HTML
+# Function to create PDF display HTML (kept for backward compatibility)
 def create_pdf_display_html(filename, pdf_bytes):
-    # Create a download button for the PDF
-    download_button = f'''
-    <div style="margin-bottom: 10px;">
-        <h3>Viewing: {filename}</h3>
-        <p>Chrome security policies may block embedded PDFs. Use the download button below to view the PDF:</p>
-        <a href="data:application/pdf;base64,{base64.b64encode(pdf_bytes).decode('utf-8')}" 
-           download="{filename}" 
-           target="_blank"
-           style="display: inline-block; 
-                  padding: 10px 20px; 
-                  background-color: #4CAF50; 
-                  color: white; 
-                  text-decoration: none; 
-                  border-radius: 4px;
-                  margin-bottom: 15px;">
-           Download PDF
-        </a>
-    </div>
-    '''
-    
-    # Use object tag instead of iframe for better browser compatibility
-    pdf_viewer = f'''
-    <object data="data:application/pdf;base64,{base64.b64encode(pdf_bytes).decode('utf-8')}" 
-            type="application/pdf" 
-            width="100%" 
-            height="800">
-        <p>Your browser doesn't support embedded PDFs. Please use the download button above.</p>
-    </object>
-    '''
-    
-    return download_button + pdf_viewer
+    # This function is no longer used for PDF display
+    # PDF display is now handled directly in ui_components.py
+    # Keeping this function for backward compatibility
+    return f"PDF: {filename}"
