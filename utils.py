@@ -35,7 +35,14 @@ def find_customer_number(customer_name, customer_master_data):
         return None, None
     
     # Create a dictionary mapping customer names to customer numbers
-    customer_dict = {data['customer_name']: cust_num for cust_num, data in customer_master_data.items()}
+    customer_dict = {}
+    for cust_num, data in customer_master_data.items():
+        if 'customer_names' in data:  # Check if using the plural 'customer_names' field
+            # Handle list of customer names
+            for name in data['customer_names']:
+                customer_dict[name] = cust_num
+        elif 'customer_name' in data:  # Backward compatibility for singular 'customer_name'
+            customer_dict[data['customer_name']] = cust_num
     
     # Use fuzzy matching to find the best match
     best_match = process.extractOne(customer_name, customer_dict.keys())

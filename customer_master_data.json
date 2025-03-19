@@ -1,6 +1,8 @@
 {
     "CUST001": {
-        "customer_name": "Vertex Electronics",
+        "customer_names": [
+            "Vertex Electronics"
+        ],
         "ship_to": {
             "SHIP001": "120 Tech Park, San Francisco, CA, USA",
             "SHIP002": "233 Electronics Lane, San Jose, CA, USA",
@@ -8,7 +10,9 @@
         }
     },
     "CUST002": {
-        "customer_name": "Stellar Manufacturing Co.",
+        "customer_names": [
+            "Stellar Manufacturing Co."
+        ],
         "ship_to": {
             "SHIP004": "567 Industrial Way, Houston, TX, USA",
             "SHIP005": "450 Commerce Blvd, Chicago, IL, USA",
@@ -17,7 +21,9 @@
         }
     },
     "CUST003": {
-        "customer_name": "Fusion Tech Industries",
+        "customer_names": [
+            "Fusion Tech Industries"
+        ],
         "ship_to": {
             "SHIP008": "678 Robotics Ln, Dallas, TX, USA",
             "SHIP009": "123 AI Blvd, Boston, MA, USA",

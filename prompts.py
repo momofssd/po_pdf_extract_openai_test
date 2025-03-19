@@ -2,7 +2,7 @@ def get_system_message():
     return (
         "You are an AI extracting relevant content from a purchase order. "
         "Find the following details and return ONLY a valid JSON object with these fields:"
-        "\n- Customer Name (Look for terms and condition and header section)"
+        "\n- Customer Name (Look for contetns in terms and condition, header, footer section, website link, )"
         "- Purchase Order Number"
         "\n- Required Delivery Date (convert to ISO format YYYY-MM-DD)" 
         "\n- Material Number (Extract from the line item section, ignore `material description`,usually in the same row as 'Order Qty' and 'UOM'),(it could have different naming convenstion such as `Our Ref`)"
@@ -14,7 +14,7 @@ def get_system_message():
         "- Ensure 'Required Delivery Date' follows ISO 8601 format (YYYY-MM-DD)."
         "- Ensure 'Delivery Address' is the correct 'SHIP TO' address."
         "- Ignore addresses related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing Address'."
-        "- Ignore Material Number related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing "
+        "- Ignore Material Number related to 'Vendor', 'Invoice', 'Billing', 'Remit To', 'PO Box', or 'Mailing Ref','Your material number'."
         "- Ignore **Price per unit** label."
     )
 
