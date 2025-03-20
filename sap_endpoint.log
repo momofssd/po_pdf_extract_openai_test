@@ -1,11 +1,11 @@
-2025-03-20 00:04:54,219 - SAP-Endpoint - INFO - Log files reset for new request
-2025-03-20 00:04:54,219 - SAP-Endpoint - INFO - POST request received at /idoc
-2025-03-20 00:04:54,219 - SAP-Endpoint - INFO - Query parameters: {}
-2025-03-20 00:04:54,220 - SAP-Endpoint - INFO - Received XML data (see sap_endpoint_xml.log for complete XML)
-2025-03-20 00:04:54,220 - SAP-Endpoint - INFO - Number of IDOCs in XML: 2
-2025-03-20 00:04:54,220 - SAP-Endpoint - INFO - IDOC 1/2 - ID: DOC1000
-2025-03-20 00:04:54,221 - SAP-Endpoint - INFO -   IDOC XML Structure:
-2025-03-20 00:04:54,221 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1000">
+2025-03-20 00:11:25,824 - SAP-Endpoint - INFO - Log files reset for new request
+2025-03-20 00:11:25,824 - SAP-Endpoint - INFO - POST request received at /idoc
+2025-03-20 00:11:25,824 - SAP-Endpoint - INFO - Query parameters: {}
+2025-03-20 00:11:25,825 - SAP-Endpoint - INFO - Received XML data (see sap_endpoint_xml.log for complete XML)
+2025-03-20 00:11:25,825 - SAP-Endpoint - INFO - Number of IDOCs in XML: 2
+2025-03-20 00:11:25,826 - SAP-Endpoint - INFO - IDOC 1/2 - ID: DOC1000
+2025-03-20 00:11:25,826 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 00:11:25,826 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1000">
     <E1EDK01>
       <ACTION>0</ACTION>
       <CURRENCY>USD</CURRENCY>
@@ -27,7 +27,7 @@
       <PARVW>WE</PARVW>
       <PARTN>M1</PARTN>
       <LIFNR>Vendor number at customer location</LIFNR>
-      <NAME1>MAGA Manufacturing</NAME1>
+      <NAME1 />
     </E1EDKA1>
     <E1EDK02>
       <QUALF>001</QUALF>
@@ -59,16 +59,16 @@
     </E1EDP19>
   </IDOC>
   
-2025-03-20 00:04:54,222 - SAP-Endpoint - INFO -   Key Fields Summary:
-2025-03-20 00:04:54,222 - SAP-Endpoint - INFO -     PO Number: PO-4001
-2025-03-20 00:04:54,222 - SAP-Endpoint - INFO -     Customer: MAGA1
-2025-03-20 00:04:54,222 - SAP-Endpoint - INFO -     Part Number: MAGA-001
-2025-03-20 00:04:54,222 - SAP-Endpoint - INFO -     Quantity: 1000
-2025-03-20 00:04:54,223 - SAP-Endpoint - INFO -     Delivery Date: 20250401
-2025-03-20 00:04:54,223 - SAP-Endpoint - INFO -     Currency: USD
-2025-03-20 00:04:54,223 - SAP-Endpoint - INFO - IDOC 2/2 - ID: DOC1001
-2025-03-20 00:04:54,223 - SAP-Endpoint - INFO -   IDOC XML Structure:
-2025-03-20 00:04:54,223 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1001">
+2025-03-20 00:11:25,826 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     PO Number: PO-4001
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Customer: MAGA1
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Part Number: MAGA-001
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Quantity: 1000
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Delivery Date: 20250401
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO - IDOC 2/2 - ID: DOC1001
+2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1001">
     <E1EDK01>
       <ACTION>0</ACTION>
       <CURRENCY>USD</CURRENCY>
@@ -90,7 +90,7 @@
       <PARVW>WE</PARVW>
       <PARTN>M3</PARTN>
       <LIFNR>Vendor number at customer location</LIFNR>
-      <NAME1>Doge Enterprises</NAME1>
+      <NAME1 />
     </E1EDKA1>
     <E1EDK02>
       <QUALF>001</QUALF>
@@ -122,10 +122,10 @@
     </E1EDP19>
   </IDOC>
 
-2025-03-20 00:04:54,224 - SAP-Endpoint - INFO -   Key Fields Summary:
-2025-03-20 00:04:54,224 - SAP-Endpoint - INFO -     PO Number: PO-4002
-2025-03-20 00:04:54,224 - SAP-Endpoint - INFO -     Customer: MAGA2
-2025-03-20 00:04:54,225 - SAP-Endpoint - INFO -     Part Number: DOGE-GEAR
-2025-03-20 00:04:54,225 - SAP-Endpoint - INFO -     Quantity: 5000
-2025-03-20 00:04:54,225 - SAP-Endpoint - INFO -     Delivery Date: 20250405
-2025-03-20 00:04:54,225 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -     PO Number: PO-4002
+2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -     Customer: MAGA2
+2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Part Number: DOGE-GEAR
+2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Quantity: 5000
+2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Delivery Date: 20250405
+2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Currency: USD

@@ -22,7 +22,7 @@
       <PARVW>WE</PARVW>
       <PARTN>M1</PARTN>
       <LIFNR>Vendor number at customer location</LIFNR>
-      <NAME1>MAGA Manufacturing</NAME1>
+      <NAME1></NAME1>
     </E1EDKA1>
     <E1EDK02>
       <QUALF>001</QUALF>
@@ -75,7 +75,7 @@
       <PARVW>WE</PARVW>
       <PARTN>M3</PARTN>
       <LIFNR>Vendor number at customer location</LIFNR>
-      <NAME1>Doge Enterprises</NAME1>
+      <NAME1></NAME1>
     </E1EDKA1>
     <E1EDK02>
       <QUALF>001</QUALF>
