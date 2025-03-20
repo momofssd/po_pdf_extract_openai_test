@@ -24,3 +24,29 @@
       <PARVW>WE</PARVW>
       <...
 2025-03-19 22:35:02,255 - SAP-Endpoint - INFO - Number of IDOCs in XML: 13
+2025-03-19 22:37:41,959 - SAP-Endpoint - INFO - POST request received at /idoc
+2025-03-19 22:37:41,960 - SAP-Endpoint - INFO - Query parameters: {}
+2025-03-19 22:37:41,960 - SAP-Endpoint - INFO - Received XML data: <?xml version="1.0" encoding="UTF-8"?>
+<ORDERS05>
+  <IDOC BEGIN="DOC1000">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST007</PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <...
+2025-03-19 22:37:41,961 - SAP-Endpoint - INFO - Number of IDOCs in XML: 13

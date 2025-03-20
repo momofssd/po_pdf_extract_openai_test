@@ -180,7 +180,7 @@ def display_data_and_downloads():
                             
                             # Display response
                             if response["status"] == "success":
-                                st.success(f"Successfully sent to Dummy SAP: {response['message']}")
+                                st.success("Success")
                             else:
                                 st.error(f"Failed to send to Dummy SAP: {response['message']}")
                                 if "details" in response:
