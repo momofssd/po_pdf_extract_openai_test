@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ORDERS05>
+  <IDOC BEGIN="DOC1000">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN></PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN></PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+      <NAME1>Berry Global</NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <DATUM>20230515</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20230515</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230515</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN></PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>319788</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1001">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN></PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN></PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+      <NAME1>Berry Global</NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <DATUM>20230612</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20230612</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230612</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN></PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>319788</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1002">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN></PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN></PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+      <NAME1>Berry Global</NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <DATUM>20230612</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20230612</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230612</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN></PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1901802</IDTNR>
+    </E1EDP19>
+  </IDOC>
+</ORDERS05>

@@ -1,0 +1,194 @@
+2025-03-19 23:39:27,406 - SAP-Endpoint - INFO - Log files reset for new request
+2025-03-19 23:39:27,407 - SAP-Endpoint - INFO - POST request received at /idoc
+2025-03-19 23:39:27,407 - SAP-Endpoint - INFO - Query parameters: {}
+2025-03-19 23:39:27,407 - SAP-Endpoint - INFO - Received XML data (see sap_endpoint_xml.log for complete XML)
+2025-03-19 23:39:27,408 - SAP-Endpoint - INFO - Number of IDOCs in XML: 3
+2025-03-19 23:39:27,408 - SAP-Endpoint - INFO - IDOC 1/3 - ID: DOC1000
+2025-03-19 23:39:27,408 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-19 23:39:27,409 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1000">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN />
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN />
+      <LIFNR>Vendor number at customer location</LIFNR>
+      <NAME1>Berry Global</NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <DATUM>20230515</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20230515</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230515</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN />
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>319788</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-19 23:39:27,409 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-19 23:39:27,409 - SAP-Endpoint - INFO -     PO Number: 4287663
+2025-03-19 23:39:27,410 - SAP-Endpoint - INFO -     Customer: N/A
+2025-03-19 23:39:27,410 - SAP-Endpoint - INFO -     Part Number: 319788
+2025-03-19 23:39:27,410 - SAP-Endpoint - INFO -     Quantity: 88422
+2025-03-19 23:39:27,410 - SAP-Endpoint - INFO -     Delivery Date: 20230515
+2025-03-19 23:39:27,410 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-19 23:39:27,411 - SAP-Endpoint - INFO - IDOC 2/3 - ID: DOC1001
+2025-03-19 23:39:27,411 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-19 23:39:27,411 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1001">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN />
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN />
+      <LIFNR>Vendor number at customer location</LIFNR>
+      <NAME1>Berry Global</NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <DATUM>20230612</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20230612</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230612</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN />
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>319788</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-19 23:39:27,412 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-19 23:39:27,412 - SAP-Endpoint - INFO -     PO Number: 4287665
+2025-03-19 23:39:27,412 - SAP-Endpoint - INFO -     Customer: N/A
+2025-03-19 23:39:27,412 - SAP-Endpoint - INFO -     Part Number: 319788
+2025-03-19 23:39:27,413 - SAP-Endpoint - INFO -     Quantity: 88422
+2025-03-19 23:39:27,413 - SAP-Endpoint - INFO -     Delivery Date: 20230612
+2025-03-19 23:39:27,413 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-19 23:39:27,413 - SAP-Endpoint - INFO - IDOC 3/3 - ID: DOC1002
+2025-03-19 23:39:27,413 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-19 23:39:27,414 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1002">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN />
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN />
+      <LIFNR>Vendor number at customer location</LIFNR>
+      <NAME1>Berry Global</NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <DATUM>20230612</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20230612</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230612</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN />
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1901802</IDTNR>
+    </E1EDP19>
+  </IDOC>
+
+2025-03-19 23:39:27,414 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-19 23:39:27,415 - SAP-Endpoint - INFO -     PO Number: 4290664
+2025-03-19 23:39:27,415 - SAP-Endpoint - INFO -     Customer: N/A
+2025-03-19 23:39:27,415 - SAP-Endpoint - INFO -     Part Number: 1901802
+2025-03-19 23:39:27,415 - SAP-Endpoint - INFO -     Quantity: 88422
+2025-03-19 23:39:27,415 - SAP-Endpoint - INFO -     Delivery Date: 20230612
+2025-03-19 23:39:27,415 - SAP-Endpoint - INFO -     Currency: USD

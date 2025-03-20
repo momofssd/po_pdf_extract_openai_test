@@ -20,4 +20,5 @@ if st.session_state.api_key_valid and st.session_state.uploaded_files_list and s
     st.session_state.extracted_data = extracted_data
 
 # Display data and download options
-edited_df = display_data_and_downloads()
+edited_df = display_data_and_downloads() 
+
