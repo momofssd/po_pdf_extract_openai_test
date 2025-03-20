@@ -30,11 +30,49 @@ def process_xml(xml_data):
     except Exception as e:
         return {"status": "error", "message": str(e)}
 
-# Check for query parameters (this is a workaround for demonstration)
-query_params = st.experimental_get_query_params()
-if "xml_data" in query_params:
-    # In a real implementation, this would be handled differently
-    xml_data = query_params["xml_data"][0]
+# Add a form to manually input XML data for testing
+with st.expander("Test with XML Input"):
+    with st.form("xml_input_form"):
+        test_xml = st.text_area("Enter XML Data for Testing", 
+                               height=200,
+                               value="""<?xml version="1.0" encoding="UTF-8"?>
+<ORDERS05>
+  <IDOC BEGIN="DOC1001">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST123</PARTN>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>PO12345</BELNR>
+    </E1EDK02>
+  </IDOC>
+</ORDERS05>""")
+        submitted = st.form_submit_button("Process Test XML")
+        if submitted and test_xml:
+            # Process the XML
+            result = process_xml(test_xml)
+            
+            # Add to request history
+            st.session_state.requests.append({
+                "timestamp": result["timestamp"],
+                "data": test_xml,
+                "status": result["status"]
+            })
+            
+            # Show a notification
+            st.success("Test XML processed!")
+            st.experimental_rerun()
+
+# For real requests coming from the main app
+# Using the newer st.query_params instead of experimental_get_query_params
+if hasattr(st, 'query_params') and 'xml_data' in st.query_params:
+    # Get the XML data from query parameters
+    xml_data = st.query_params['xml_data']
     
     # Process the XML
     result = process_xml(xml_data)
@@ -49,8 +87,12 @@ if "xml_data" in query_params:
     # Show a notification
     st.success("Received new IDoc-XML data!")
     
-    # Clear the query parameter to avoid processing it again on refresh
-    st.experimental_set_query_params()
+    # Clear the query parameter
+    if hasattr(st, 'query_params'):
+        st.query_params.clear()
+    
+    # Force a rerun to update the UI
+    st.experimental_rerun()
 
 # Display received XML data
 if not st.session_state.requests:

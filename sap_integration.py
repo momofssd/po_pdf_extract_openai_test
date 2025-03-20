@@ -155,19 +155,30 @@ def send_idoc_xml_to_sap(xml_data, endpoint_url="http://localhost:8000/idoc"):
         return {"status": "error", "message": "No XML data to send"}
     
     try:
-        # Set headers for XML content
-        headers = {
-            'Content-Type': 'application/xml',
-            'Accept': 'application/json'
-        }
-        
-        # Send POST request to SAP endpoint
-        response = requests.post(
-            endpoint_url,
-            data=xml_data,
-            headers=headers,
-            timeout=30  # 30 seconds timeout
-        )
+        # Check if the endpoint is the Streamlit app
+        if "streamlit.app" in endpoint_url:
+            # For Streamlit app, send as query parameter
+            # This is a workaround since Streamlit doesn't natively support POST requests with bodies
+            params = {'xml_data': xml_data}
+            response = requests.get(
+                endpoint_url,
+                params=params,
+                timeout=30  # 30 seconds timeout
+            )
+        else:
+            # For regular SAP endpoint, send as POST with XML body
+            headers = {
+                'Content-Type': 'application/xml',
+                'Accept': 'application/json'
+            }
+            
+            # Send POST request to SAP endpoint
+            response = requests.post(
+                endpoint_url,
+                data=xml_data,
+                headers=headers,
+                timeout=30  # 30 seconds timeout
+            )
         
         # Check if request was successful
         if response.status_code == 200:
