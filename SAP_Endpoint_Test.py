@@ -78,12 +78,34 @@ with st.expander("Test with XML Input"):
                 # If rerun fails, just show a message
                 st.info("Please refresh the page to see the updated data.")
 
+# Debug information
+st.sidebar.subheader("Debug Information")
+st.sidebar.write("This section shows technical details to help troubleshoot issues.")
+
+# Check if query parameters exist
+if hasattr(st, 'query_params'):
+    st.sidebar.write("Query Parameters Available:", list(st.query_params.keys()) if st.query_params else "None")
+else:
+    st.sidebar.write("Query Parameters: Not supported in this Streamlit version")
+
+# Show session state for debugging
+st.sidebar.write(f"Requests in Session State: {len(st.session_state.requests)}")
+
 # For real requests coming from the main app
-# Using the newer st.query_params instead of experimental_get_query_params
-if hasattr(st, 'query_params') and 'xml_data' in st.query_params:
-    # Get the XML data from query parameters
-    xml_data = st.query_params['xml_data']
-    
+# First check for query parameters
+has_xml_data = False
+
+# Check using the newer st.query_params
+if hasattr(st, 'query_params') and st.query_params:
+    if 'xml_data' in st.query_params:
+        has_xml_data = True
+        xml_data = st.query_params['xml_data']
+        st.sidebar.success("XML data found in query_params!")
+    else:
+        st.sidebar.info("No xml_data found in query_params")
+
+# If we found XML data, process it
+if has_xml_data:
     # Process the XML
     result = process_xml(xml_data)
     
@@ -96,21 +118,15 @@ if hasattr(st, 'query_params') and 'xml_data' in st.query_params:
     
     # Show a notification
     st.success("Received new IDoc-XML data!")
+    st.sidebar.success(f"Processed XML with {result['message']}")
     
     # Clear the query parameter
     if hasattr(st, 'query_params'):
         st.query_params.clear()
+        st.sidebar.info("Query parameters cleared")
     
-    # Force a rerun to update the UI
-    try:
-        if hasattr(st, 'rerun'):
-            st.rerun()
-        else:
-            # Fallback for older Streamlit versions
-            st.experimental_rerun()
-    except Exception as e:
-        # If rerun fails, just show a message
-        st.info("Please refresh the page to see the updated data.")
+    # Don't use rerun as it might cause issues
+    st.info("XML data processed. The page will update when you refresh it.")
 
 # Display received XML data
 if not st.session_state.requests:
