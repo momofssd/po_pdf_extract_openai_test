@@ -1,6 +1,6 @@
 # Streamlit PDF Purchase Order Extractor for SAP Integration
 
-A Streamlit-based web application for extracting and processing purchase order information from PDF documents. This application uses OpenAI's GPT-4o model to intelligently extract key information from purchase order PDFs, match it with customer master data, and export it in a format ready for SAP ERP data entry via VBS scripting.
+A Streamlit-based web application for extracting and processing purchase order information from PDF documents. This application uses OpenAI's GPT-4o model to intelligently extract key information from purchase order PDFs, match it with customer master data, and export it in a format ready for SAP ERP data entry via EDI integration or scripting.
 
 **Try the deployed application here: [https://poextrationopenai.streamlit.app/](https://poextrationopenai.streamlit.app/)**
 
@@ -265,7 +265,7 @@ flowchart TD
     M --> N[Display in Streamlit UI]
     N --> O[User Review & Edit]
     O --> P[Export to Excel]
-    P --> Q[VBS Script for SAP Data Entry]
+    P --> Q[Script for SAP Data Entry]
     Q --> R[SAP ERP System]
     
     style A fill:#f9d5e5,stroke:#333,stroke-width:2px
