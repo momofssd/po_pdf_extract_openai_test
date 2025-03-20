@@ -84,7 +84,7 @@ def generate_idoc_xml_data(df):
         buffer.write(f'      <PARTN>{ship_to_number}</PARTN>\n')
         buffer.write('      <LIFNR>Vendor number at customer location</LIFNR>\n')
         if customer_name:
-            buffer.write(f'      <NAME1>{customer_name}</NAME1>\n')
+            buffer.write(f'      <NAME1></NAME1>\n')
         buffer.write('    </E1EDKA1>\n')
         
         # E1EDK02: Header reference data - Customer PO
