@@ -30,5 +30,23 @@
             "SHIP010": "789 Industrial Park, Austin, TX, USA",
             "SHIP011": "987 Automation Rd, Denver, CO, USA"
         }
+    },
+    "MAGA1": {
+        "customer_names": [
+            "MAGA Manufacturing"
+        ],
+        "ship_to": {
+            "M1": "100 Freedom St, Houston, TX, USA",
+            "M2": "101 Washington ST, Washionton DC. US"
+        }
+    },
+    "MAGA2": {
+        "customer_names": [
+            "Doge Enterprises"
+        ],
+        "ship_to": {
+            "M3": "99 Meme St, Shiba City, TX, USA",
+            "M4": "101 Main ST, Houston TX"
+        }
     }
 }
