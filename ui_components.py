@@ -155,7 +155,7 @@ def display_data_and_downloads():
                     )
                     
                     # Send to SAP button
-                    if st.button(" Send to SAP Local Host"):
+                    if st.button(" Send to SAP"):
                         # Show spinner while sending
                         with st.spinner("Sending to SAP..."):
                             # Send IDoc-XML data to SAP endpoint
@@ -166,48 +166,6 @@ def display_data_and_downloads():
                                 st.success("Success")
                             else:
                                 st.error("Failed")
-                    
-                    # Send to Dummy SAP button
-                    if st.button(" Send to Dummy SAP"):
-                        # Show spinner while sending
-                        with st.spinner("Sending to Dummy SAP Endpoint..."):
-                            try:
-                                # Send IDoc-XML data to the dummy SAP endpoint
-                                # Use the deployed dummy SAP endpoint
-                                dummy_endpoint_url = "https://sapendpoint.streamlit.app/"
-                                
-                                # The XML data might be too large for a query parameter
-                                # Let's provide a direct link to the SAP endpoint with instructions
-                                st.info("Due to limitations with Streamlit, direct transmission may not work for large XML files.")
-                                
-                                # Create a download link for the XML
-                                st.download_button(
-                                    label="Download XML for Manual Upload",
-                                    data=idoc_xml_data,
-                                    file_name="SAP_IDOC_Data_for_Upload.xml",
-                                    mime="application/xml",
-                                )
-                                
-                                st.markdown(f"""
-                                ### Manual Upload Instructions:
-                                1. Download the XML file using the button above
-                                2. Visit [SAP Endpoint App]({dummy_endpoint_url})
-                                3. Click on "Test with XML Input" 
-                                4. Paste the contents of the downloaded file
-                                5. Click "Process Test XML"
-                                """)
-                                
-                                # Still try the automatic transmission
-                                response = send_idoc_xml_to_sap(idoc_xml_data, endpoint_url=dummy_endpoint_url)
-                                
-                                # Display response
-                                if response["status"] == "success":
-                                    st.success("Success! Automatic transmission worked.")
-                                else:
-                                    st.warning("Automatic transmission failed. Please use the manual upload method described above.")
-                            except Exception as e:
-                                st.error(f"Error: {str(e)}")
-                                st.info("Please use the manual upload method described above.")
             
             return edited_df
         else:

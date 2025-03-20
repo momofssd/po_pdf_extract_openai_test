@@ -2,19 +2,40 @@ import http.server
 import socketserver
 import json
 import logging
+import os
 from urllib.parse import urlparse, parse_qs
 import xml.etree.ElementTree as ET
+
+# File paths
+LOG_FILE = "sap_endpoint.log"
+XML_FILE = "sap_endpoint_xml.log"
+
+# Function to reset log files
+def reset_log_files():
+    # Clear the log file by opening it in write mode
+    with open(LOG_FILE, 'w') as f:
+        f.write("")  # Write empty string to clear the file
+    
+    # Clear the XML log file
+    with open(XML_FILE, 'w') as f:
+        f.write("")  # Write empty string to clear the file
+    
+    print(f"Log files {LOG_FILE} and {XML_FILE} have been reset")
 
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler("sap_endpoint.log"),
+        logging.FileHandler(LOG_FILE),
         logging.StreamHandler()
     ]
 )
 logger = logging.getLogger("SAP-Endpoint")
+
+# Reset log files on startup
+reset_log_files()
+logger.info("SAP Endpoint server starting - log files reset")
 
 # Define the port
 PORT = 8000
@@ -40,6 +61,10 @@ class SAPEndpointHandler(http.server.BaseHTTPRequestHandler):
         logger.info(f"GET request received at {self.path}")
     
     def do_POST(self):
+        # Reset log files for each new request
+        reset_log_files()
+        logger.info("Log files reset for new request")
+        
         # Get content length
         content_length = int(self.headers['Content-Length'])
         # Read the data
@@ -58,7 +83,13 @@ class SAPEndpointHandler(http.server.BaseHTTPRequestHandler):
             # Try to parse as XML
             xml_data = post_data.decode('utf-8')
             root = ET.fromstring(xml_data)
-            logger.info(f"Received XML data: {xml_data[:500]}...")  # Log first 500 chars
+            
+            # Log a message about receiving XML
+            logger.info("Received XML data (see sap_endpoint_xml.log for complete XML)")
+            
+            # Write the complete XML to a separate file
+            with open(XML_FILE, 'w') as f:
+                f.write(xml_data)
             
             # Count the number of IDOCs
             idocs = root.findall('.//IDOC')
@@ -70,25 +101,45 @@ class SAPEndpointHandler(http.server.BaseHTTPRequestHandler):
                 idoc_id = idoc.get('BEGIN', f'Unknown-{idx}')
                 logger.info(f"IDOC {idx+1}/{idoc_count} - ID: {idoc_id}")
                 
+                # Log the entire IDOC structure
+                logger.info(f"  IDOC XML Structure:")
+                
+                # Convert IDOC element to string and log it
+                idoc_str = ET.tostring(idoc, encoding='unicode')
+                logger.info(f"  {idoc_str}")
+                
+                # Also log specific fields for quick reference
+                logger.info(f"  Key Fields Summary:")
+                
                 # Try to extract PO number
                 po_elem = idoc.find('.//E1EDK02/BELNR')
                 po_number = po_elem.text if po_elem is not None and po_elem.text else "N/A"
-                logger.info(f"  PO Number: {po_number}")
+                logger.info(f"    PO Number: {po_number}")
                 
                 # Try to extract customer number
                 cust_elem = idoc.find('.//E1EDKA1/PARTN')
                 customer = cust_elem.text if cust_elem is not None and cust_elem.text else "N/A"
-                logger.info(f"  Customer: {customer}")
+                logger.info(f"    Customer: {customer}")
                 
                 # Try to extract part number
                 part_elem = idoc.find('.//E1EDP19/IDTNR')
                 part_number = part_elem.text if part_elem is not None and part_elem.text else "N/A"
-                logger.info(f"  Part Number: {part_number}")
+                logger.info(f"    Part Number: {part_number}")
                 
                 # Try to extract quantity
                 qty_elem = idoc.find('.//E1EDP01/MENGE')
                 quantity = qty_elem.text if qty_elem is not None and qty_elem.text else "N/A"
-                logger.info(f"  Quantity: {quantity}")
+                logger.info(f"    Quantity: {quantity}")
+                
+                # Try to extract delivery date
+                date_elem = idoc.find('.//E1EDK02/DATUM')
+                delivery_date = date_elem.text if date_elem is not None and date_elem.text else "N/A"
+                logger.info(f"    Delivery Date: {delivery_date}")
+                
+                # Try to extract currency
+                currency_elem = idoc.find('.//E1EDK01/CURRENCY')
+                currency = currency_elem.text if currency_elem is not None and currency_elem.text else "N/A"
+                logger.info(f"    Currency: {currency}")
             
             # Simulate SAP processing
             # In a real scenario, this would validate the XML against SAP schemas

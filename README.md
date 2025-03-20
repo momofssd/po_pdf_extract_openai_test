@@ -471,80 +471,7 @@ For direct integration with SAP's IDoc (Intermediate Document) system, the appli
 1. **SAP IDoc Standard**: Follows the SAP IDoc structure for purchase orders
 2. **XML Format**: Uses XML for better compatibility with modern systems
 3. **Direct SAP Import**: The generated XML file can be imported into SAP systems
-
-#### IDoc-XML Structure
-
-The generated file follows the SAP IDoc XML structure with the following segments:
-
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<ORDERS05>
-  <IDOC BEGIN="DOC1001">
-    <E1EDK01>
-      <ACTION>0</ACTION>
-      <CURRENCY>USD</CURRENCY>
-    </E1EDK01>
-    <E1EDK14>
-      <QUALF>012</QUALF>
-      <ORGID>OR</ORGID>
-    </E1EDK14>
-    <E1EDK14>
-      <QUALF>019</QUALF>
-      <ORGID>B2B</ORGID>
-    </E1EDK14>
-    <E1EDKA1>
-      <PARVW>AG</PARVW>
-      <PARTN>CUST123</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
-    </E1EDKA1>
-    <E1EDKA1>
-      <PARVW>WE</PARVW>
-      <PARTN>SHIP456</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
-      <NAME1>Customer Name</NAME1>
-    </E1EDKA1>
-    <E1EDK02>
-      <QUALF>001</QUALF>
-      <BELNR>PO12345</BELNR>
-      <DATUM>20250319</DATUM>
-    </E1EDK02>
-    <E1EDP01>
-      <POSEX>1</POSEX>
-      <MENGE>50</MENGE>
-      <MENEE>KG</MENEE>
-    </E1EDP01>
-    <E1EDP02>
-      <QUALF>001</QUALF>
-      <BELNR>PO12345</BELNR>
-      <ZEILE>1</ZEILE>
-      <DATUM>20250319</DATUM>
-    </E1EDP02>
-    <E1EDP03>
-      <IDDAT>002</IDDAT>
-      <DATUM>20250325</DATUM>
-    </E1EDP03>
-    <E1EDPA1>
-      <PARVW>EN</PARVW>
-      <PARTN>CUST123</PARTN>
-    </E1EDPA1>
-    <E1EDP19>
-      <QUALF>001</QUALF>
-      <IDTNR>PARTXYZ</IDTNR>
-    </E1EDP19>
-  </IDOC>
-</ORDERS05>
-```
-
-Each segment corresponds to the IDoc guideline structure:
-1. **E1EDK01**: Header general data (Action, Currency)
-2. **E1EDK14**: Header organizational data (Order type is always "OR" as specified)
-3. **E1EDKA1**: Header partner information (Sold-to party, Ship-to party)
-4. **E1EDK02**: Header reference data (Customer PO number, date)
-5. **E1EDP01**: Item reference data (Item number, quantity, UOM)
-6. **E1EDP02**: Item reference data (Customer PO, item number)
-7. **E1EDP03**: Item date segment (Required delivery date)
-8. **E1EDPA1**: Item partner information (End user)
-9. **E1EDP19**: Item object identification (Customer part number)
+4. **Direct Transmission**: Send IDoc-XML data directly to SAP endpoints
 
 #### Using the IDoc-XML Feature
 
@@ -556,6 +483,84 @@ To generate and download an IDoc-XML file:
 4. Import the downloaded XML file into your SAP system
 
 Each row in the DataFrame is processed as a separate IDoc record within the XML file, making it suitable for both single and multi-line purchase orders.
+
+### 4. Direct SAP Endpoint Integration and Testing
+
+The application includes a built-in SAP endpoint simulator for testing IDoc-XML transmission:
+
+1. **Local SAP Endpoint**: A Python-based HTTP server that simulates a SAP endpoint
+2. **Direct Transmission**: Send IDoc-XML data directly to SAP systems
+3. **Comprehensive Logging**: Detailed logging of all transmitted data
+4. **Testing Environment**: Test SAP integration without a real SAP system
+
+#### SAP Endpoint Simulator (sap_endpoint.py)
+
+The application includes a SAP endpoint simulator (`sap_endpoint.py`) that can be used to test the IDoc-XML transmission:
+
+```python
+# Start the SAP endpoint simulator
+python sap_endpoint.py
+```
+
+This will start a local HTTP server on port 8000 that simulates a SAP endpoint. The server will:
+1. Receive IDoc-XML data via HTTP POST requests
+2. Parse and validate the XML data
+3. Extract key information from each IDOC
+4. Log the complete XML and processing details
+5. Return a success/failure response
+
+#### Logging and Monitoring
+
+The SAP endpoint simulator provides comprehensive logging:
+
+1. **Complete XML Logging**: The entire XML document is saved to `sap_endpoint_xml.log`
+2. **Processing Details**: Detailed information about each IDOC is logged to `sap_endpoint.log`
+3. **IDOC Structure**: The complete structure of each IDOC is logged
+4. **Key Fields**: Important fields like PO Number, Customer, Part Number, Quantity, etc. are extracted and logged
+
+#### Testing SAP Integration
+
+To test the SAP integration:
+
+1. Start the SAP endpoint simulator:
+   ```
+   python sap_endpoint.py
+   ```
+
+2. Process your PDF purchase orders in the main application
+
+3. Click the "Send to SAP" button to transmit the IDoc-XML data to the local SAP endpoint
+
+4. Check the logs to verify the transmission:
+   - `sap_endpoint_xml.log`: Contains the complete XML document
+   - `sap_endpoint.log`: Contains detailed processing information
+
+This testing environment allows you to verify that your IDoc-XML data is correctly formatted and can be properly processed by a SAP system, without requiring access to a real SAP environment.
+
+#### SAP Integration Architecture
+
+The following diagram illustrates the SAP integration architecture:
+
+```mermaid
+flowchart TD
+    A[PDF Purchase Order] --> B[Streamlit App]
+    B --> C[Extract Data]
+    C --> D[Match Customer Data]
+    D --> E[Generate IDoc-XML]
+    E --> F{Integration Method}
+    F -->|Download| G[Manual Import to SAP]
+    F -->|Direct Send| H[SAP Endpoint]
+    H --> I[Process IDOCs]
+    I --> J[Log Results]
+    J --> K[SAP ERP System]
+    
+    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style E fill:#eeeeee,stroke:#333,stroke-width:2px
+    style H fill:#d5e8d4,stroke:#333,stroke-width:2px
+    style K fill:#d5e8d4,stroke:#333,stroke-width:2px
+```
+
+This diagram shows how the system integrates with SAP, highlighting both the manual import option and the direct transmission option using the SAP endpoint.
 
 ## Extending the Application
 

@@ -30,50 +30,5 @@
             "SHIP010": "789 Industrial Park, Austin, TX, USA",
             "SHIP011": "987 Automation Rd, Denver, CO, USA"
         }
-    },
-    "CUST004": {
-        "customer_names": [
-            "Nexeo"
-        ],
-        "ship_to": {
-            "SHIP012": "654 Distribution Cir, Miami, FL, USA",
-            "SHIP013": "Transcare Logistics Corp RS (3P) CONTROL PLT - KTN CANADA 0047 400 LONGWOOD RD HAMILTON ON L8P 4Z3 CANADA",
-            "SHIP014": "432 Logistics Blvd, Toronto, ON, Canada",
-            "SHIP015": "321 Transport Ave, Vancouver, BC, Canada"
-        }
-    },
-    "CUST005": {
-        "customer_names": [
-            "Berry Global"
-        ],
-        "ship_to": {
-            "SHIP016": "550 Warehouse St, Nashville, TN, USA",
-            "SHIP017": "12900 S. PULASKI RD ALSIP IL 60803",
-            "SHIP018": "20 ELMWOOD AVE. CRESTWOOD INDUMOUNTAINTOP PA 18707",
-            "SHIP019": "602 Packaging Rd, Louisville, KY, USA"
-        }
-    },
-    "CUST006": {
-        "customer_names": [
-            "Galata Chemicals"
-        ],
-        "ship_to": {
-            "SHIP016": "980 Chemical Park, New Orleans, LA, USA",
-            "SHIP017": "465 HARTLEY DR RAVENSWOOD WV 26164 USA",
-            "SHIP018": "375 Polymer Ave, Baton Rouge, LA, USA",
-            "SHIP019": "711 Plastics Blvd, Dallas, TX, USA"
-        }
-    },
-    "CUST007": {
-        "customer_names": [
-            "Thermal Fisher",
-            "Nalge Nun"
-        ],
-        "ship_to": {
-            "SHIP017": "101 main st, Houston ,T TX USA",
-            "SHIP018": "102 main st, Houston ,T TX USA",
-            "SHIP019": " 1600 Lexington Avenue Rochester NY 14606",
-            "SHIP016": "103 main st, Houston ,T TX USA"
-        }
     }
 }
