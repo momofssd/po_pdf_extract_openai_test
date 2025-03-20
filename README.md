@@ -277,23 +277,80 @@ flowchart TD
 
 This diagram shows how the system processes purchase orders from PDF upload through to SAP data entry, highlighting the key role of customer data matching and Excel export for VBS scripting.
 
-## Customer Data Matching
+## Customer Data Management
 
-The application includes fuzzy matching capabilities to identify customer information:
+### 1. Customer Master Data Conversion
 
-### 1. Customer Master Data
+The application includes a utility script (`update_customer_master.py`) to convert customer master data from Excel to JSON format:
+
+```python
+# Load the Excel file
+file_path = "customer master.xlsx"
+df = pd.read_excel(file_path)
+
+# Normalize 'Customer Number' (strip spaces and convert to uppercase)
+df["Customer Number"] = df["Customer Number"].astype(str).str.strip().str.upper()
+
+# Fill empty 'Customer Name' downward to ensure each row has a name
+df["Customer Name"] = df["Customer Name"].fillna(method="ffill")
+
+# Convert DataFrame to JSON-like dictionary
+customer_dict = {}
+
+for _, row in df.iterrows():
+    cust_num = row["Customer Number"]
+    cust_name = row["Customer Name"]
+    ship_to_num = row["Ship-To Number"]
+    ship_to_addr = row["Ship-To Address"]
+
+    if cust_num not in customer_dict:
+        customer_dict[cust_num] = {
+            "customer_names": set(),  # Using a set to handle multiple names
+            "ship_to": {}
+        }
+
+    customer_dict[cust_num]["customer_names"].add(cust_name)
+
+    if pd.notna(ship_to_num) and pd.notna(ship_to_addr):
+        customer_dict[cust_num]["ship_to"][ship_to_num] = ship_to_addr
+
+# Convert sets to lists for JSON serialization
+for cust_num in customer_dict:
+    customer_dict[cust_num]["customer_names"] = list(customer_dict[cust_num]["customer_names"])
+```
+
+This script:
+- Loads customer data from an Excel file
+- Normalizes customer numbers and names
+- Handles multiple customer names for the same customer number using sets to avoid duplicates
+- Organizes ship-to addresses by customer number
+- Converts the data to a JSON structure and saves it to `customer_master_data.json`
+
+To update the customer master data:
+1. Update the "customer master.xlsx" file with the latest customer information
+2. Run the script: `python update_customer_master.py`
+3. The updated `customer_master_data.json` file will be used by the application
+
+### 2. Customer Data Structure
 
 The system uses a JSON file (`customer_master_data.json`) containing customer information:
 - Customer numbers
-- Customer names
+- Customer names (stored as lists to support multiple name variations)
 - Ship-to locations and their corresponding numbers
 
-### 2. Fuzzy Matching Process
+### 3. Fuzzy Matching Process
 
 ```python
 def find_customer_number(customer_name, customer_master_data):
     # Create a dictionary mapping customer names to customer numbers
-    customer_dict = {data['customer_name']: cust_num for cust_num, data in customer_master_data.items()}
+    customer_dict = {}
+    for cust_num, data in customer_master_data.items():
+        if 'customer_names' in data:  # Check if using the plural 'customer_names' field
+            # Handle list of customer names
+            for name in data['customer_names']:
+                customer_dict[name] = cust_num
+        elif 'customer_name' in data:  # Backward compatibility for singular 'customer_name'
+            customer_dict[data['customer_name']] = cust_num
     
     # Use fuzzy matching to find the best match
     best_match = process.extractOne(customer_name, customer_dict.keys())
@@ -311,7 +368,7 @@ def find_customer_number(customer_name, customer_master_data):
 - This handles variations, abbreviations, and minor differences in naming conventions
 - Once a customer is identified, the system can retrieve the appropriate ship-to information
 
-### 3. Ship-To Number Identification
+### 4. Ship-To Number Identification
 
 ```python
 def find_ship_to_number(customer_number, delivery_address, customer_master_data):
