@@ -163,11 +163,9 @@ def display_data_and_downloads():
                             
                             # Display response
                             if response["status"] == "success":
-                                st.success(f"Successfully sent to SAP: {response['message']}")
+                                st.success("Success")
                             else:
-                                st.error(f"Failed to send to SAP: {response['message']}")
-                                if "details" in response:
-                                    st.info(f"Details: {response['details']}")
+                                st.error("Failed")
                     
                     # Send to Dummy SAP button
                     if st.button(" Send to Dummy SAP"):
