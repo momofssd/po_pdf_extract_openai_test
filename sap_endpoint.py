@@ -61,8 +61,34 @@ class SAPEndpointHandler(http.server.BaseHTTPRequestHandler):
             logger.info(f"Received XML data: {xml_data[:500]}...")  # Log first 500 chars
             
             # Count the number of IDOCs
-            idoc_count = len(root.findall('.//IDOC'))
+            idocs = root.findall('.//IDOC')
+            idoc_count = len(idocs)
             logger.info(f"Number of IDOCs in XML: {idoc_count}")
+            
+            # Log information about each IDOC
+            for idx, idoc in enumerate(idocs):
+                idoc_id = idoc.get('BEGIN', f'Unknown-{idx}')
+                logger.info(f"IDOC {idx+1}/{idoc_count} - ID: {idoc_id}")
+                
+                # Try to extract PO number
+                po_elem = idoc.find('.//E1EDK02/BELNR')
+                po_number = po_elem.text if po_elem is not None and po_elem.text else "N/A"
+                logger.info(f"  PO Number: {po_number}")
+                
+                # Try to extract customer number
+                cust_elem = idoc.find('.//E1EDKA1/PARTN')
+                customer = cust_elem.text if cust_elem is not None and cust_elem.text else "N/A"
+                logger.info(f"  Customer: {customer}")
+                
+                # Try to extract part number
+                part_elem = idoc.find('.//E1EDP19/IDTNR')
+                part_number = part_elem.text if part_elem is not None and part_elem.text else "N/A"
+                logger.info(f"  Part Number: {part_number}")
+                
+                # Try to extract quantity
+                qty_elem = idoc.find('.//E1EDP01/MENGE')
+                quantity = qty_elem.text if qty_elem is not None and qty_elem.text else "N/A"
+                logger.info(f"  Quantity: {quantity}")
             
             # Simulate SAP processing
             # In a real scenario, this would validate the XML against SAP schemas

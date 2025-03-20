@@ -1,7 +1,6 @@
-2025-03-19 22:06:54,701 - SAP-Endpoint - INFO - SAP Endpoint server started at port 8000
-2025-03-19 22:07:03,557 - SAP-Endpoint - INFO - POST request received at /idoc
-2025-03-19 22:07:03,557 - SAP-Endpoint - INFO - Query parameters: {}
-2025-03-19 22:07:03,558 - SAP-Endpoint - INFO - Received XML data: <?xml version="1.0" encoding="UTF-8"?>
+2025-03-19 22:35:02,253 - SAP-Endpoint - INFO - POST request received at /idoc
+2025-03-19 22:35:02,253 - SAP-Endpoint - INFO - Query parameters: {}
+2025-03-19 22:35:02,254 - SAP-Endpoint - INFO - Received XML data: <?xml version="1.0" encoding="UTF-8"?>
 <ORDERS05>
   <IDOC BEGIN="DOC1000">
     <E1EDK01>
@@ -24,4 +23,4 @@
     <E1EDKA1>
       <PARVW>WE</PARVW>
       <...
-2025-03-19 22:07:03,558 - SAP-Endpoint - INFO - Number of IDOCs in XML: 13
+2025-03-19 22:35:02,255 - SAP-Endpoint - INFO - Number of IDOCs in XML: 13

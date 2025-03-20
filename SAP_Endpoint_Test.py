@@ -36,21 +36,32 @@ def process_xml(xml_data):
             po_elem = idoc.find('.//E1EDK02/BELNR')
             if po_elem is not None and po_elem.text:
                 idoc_info["po_number"] = po_elem.text
+            else:
+                idoc_info["po_number"] = "N/A"
             
             # Try to extract customer number
             cust_elem = idoc.find('.//E1EDKA1/PARTN')
             if cust_elem is not None and cust_elem.text:
                 idoc_info["customer"] = cust_elem.text
+            else:
+                idoc_info["customer"] = "N/A"
                 
             # Try to extract part number
             part_elem = idoc.find('.//E1EDP19/IDTNR')
             if part_elem is not None and part_elem.text:
                 idoc_info["part_number"] = part_elem.text
+            else:
+                idoc_info["part_number"] = "N/A"
                 
             # Try to extract quantity
             qty_elem = idoc.find('.//E1EDP01/MENGE')
             if qty_elem is not None and qty_elem.text:
                 idoc_info["quantity"] = qty_elem.text
+            else:
+                idoc_info["quantity"] = "N/A"
+                
+            # Print detailed info for debugging
+            print(f"Processing IDOC {idx+1}: ID={idoc_info['id']}, PO={idoc_info['po_number']}, Customer={idoc_info['customer']}")
                 
             idocs.append(idoc_info)
         
