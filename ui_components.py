@@ -145,7 +145,7 @@ def display_data_and_downloads():
                 idoc_xml_data = generate_idoc_xml_data(download_df)
                 
                 if idoc_xml_data:
-                    col4a, col4b = st.columns(2)
+                    col4a, col4b, col4c = st.columns(3)
                     
                     with col4a:
                         st.download_button(
@@ -169,6 +169,25 @@ def display_data_and_downloads():
                                     st.error(f"Failed to send to SAP: {response['message']}")
                                     if "details" in response:
                                         st.info(f"Details: {response['details']}")
+                    
+                    with col4c:
+                        # Add a button to send to the dummy SAP endpoint
+                        if st.button(" Send to Dummy SAP"):
+                            # Show spinner while sending
+                            with st.spinner("Sending to Dummy SAP Endpoint..."):
+                                # Send IDoc-XML data to the dummy SAP endpoint
+                                # The URL will be updated after deployment
+                                dummy_endpoint_url = "https://your-dummy-sap-endpoint.streamlit.app/"
+                                response = send_idoc_xml_to_sap(idoc_xml_data, endpoint_url=dummy_endpoint_url)
+                                
+                                # Display response
+                                if response["status"] == "success":
+                                    st.success(f"Successfully sent to Dummy SAP: {response['message']}")
+                                else:
+                                    st.error(f"Failed to send to Dummy SAP: {response['message']}")
+                                    if "details" in response:
+                                        st.info(f"Details: {response['details']}")
+                                    st.info("Note: Make sure to update the dummy endpoint URL in the code after deployment.")
             
             return edited_df
         else:
