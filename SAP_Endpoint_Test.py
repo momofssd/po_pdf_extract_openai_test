@@ -66,7 +66,17 @@ with st.expander("Test with XML Input"):
             
             # Show a notification
             st.success("Test XML processed!")
-            st.experimental_rerun()
+            
+            # Use st.rerun() if available, otherwise use the older st.experimental_rerun()
+            try:
+                if hasattr(st, 'rerun'):
+                    st.rerun()
+                else:
+                    # Fallback for older Streamlit versions
+                    st.experimental_rerun()
+            except Exception as e:
+                # If rerun fails, just show a message
+                st.info("Please refresh the page to see the updated data.")
 
 # For real requests coming from the main app
 # Using the newer st.query_params instead of experimental_get_query_params
@@ -92,7 +102,15 @@ if hasattr(st, 'query_params') and 'xml_data' in st.query_params:
         st.query_params.clear()
     
     # Force a rerun to update the UI
-    st.experimental_rerun()
+    try:
+        if hasattr(st, 'rerun'):
+            st.rerun()
+        else:
+            # Fallback for older Streamlit versions
+            st.experimental_rerun()
+    except Exception as e:
+        # If rerun fails, just show a message
+        st.info("Please refresh the page to see the updated data.")
 
 # Display received XML data
 if not st.session_state.requests:
