@@ -1,5 +1,8 @@
 import pandas as pd
 import streamlit as st
+import json
+import datetime
+import io
 from utils import load_customer_master_data, find_customer_number, find_ship_to_number
 
 # Function to convert extracted data to pandas DataFrame
@@ -73,13 +76,32 @@ def convert_to_dataframe(extracted_data):
     # Create DataFrame
     if all_records:
         df = pd.DataFrame(all_records)
+        
+        # Rename columns as needed
+        column_mapping = {
+            'Material Number': 'Customer Part Number',
+            'Order Quantity in kg': 'Order Quantity'
+        }
+        df = df.rename(columns=column_mapping)
+        
         # Reorder columns to put filename first, followed by customer number and ship to number
         priority_cols = ['filename', 'Customer Number', 'Ship To Number']
         other_cols = [col for col in df.columns if col not in priority_cols]
         cols = priority_cols + other_cols
-        return df[cols]
+        
+        # Reorder the DataFrame columns
+        df = df[cols]
+        
+        # Print DataFrame to console for debugging
+        print("\n===== DataFrame Output =====")
+        print(df)
+        print("===========================\n")
+        
+        return df
     else:
         return pd.DataFrame()  # Empty DataFrame if no records
+
+# SAP integration functions have been moved to sap_integration.py
 
 # Function to clean and parse JSON response from OpenAI
 def process_api_response(extract_contents, pdf_file_name):

@@ -80,7 +80,7 @@ def display_data_and_downloads():
             csv = download_df.to_csv(index=False)
             
             # Create download buttons
-            col1, col2 = st.columns(2)
+            col1, col2, col3, col4 = st.columns(4)
             with col1:
                 # Create download button for CSV
                 st.download_button(
@@ -121,6 +121,54 @@ def display_data_and_downloads():
                         )
                 except Exception as e:
                     st.info("Excel download not available. Please use CSV format.")
+            
+            with col3:
+                # Generate ANSI X12 850 data for SAP integration
+                from sap_integration import generate_ansi_x12_850_data
+                
+                # Create ANSI X12 850 data
+                ansi_data = generate_ansi_x12_850_data(download_df)
+                
+                if ansi_data:
+                    st.download_button(
+                        label=" Download ANSI X12 850",
+                        data=ansi_data,
+                        file_name="ANSI_X12_850_Data.txt",
+                        mime="text/plain",
+                    )
+            
+            with col4:
+                # Generate IDoc-XML data for SAP integration
+                from sap_integration import generate_idoc_xml_data, send_idoc_xml_to_sap
+                
+                # Create IDoc-XML data
+                idoc_xml_data = generate_idoc_xml_data(download_df)
+                
+                if idoc_xml_data:
+                    col4a, col4b = st.columns(2)
+                    
+                    with col4a:
+                        st.download_button(
+                            label=" Download IDoc-XML",
+                            data=idoc_xml_data,
+                            file_name="SAP_IDOC_Data.xml",
+                            mime="application/xml",
+                        )
+                    
+                    with col4b:
+                        if st.button(" Send to SAP"):
+                            # Show spinner while sending
+                            with st.spinner("Sending to SAP..."):
+                                # Send IDoc-XML data to SAP endpoint
+                                response = send_idoc_xml_to_sap(idoc_xml_data)
+                                
+                                # Display response
+                                if response["status"] == "success":
+                                    st.success(f"Successfully sent to SAP: {response['message']}")
+                                else:
+                                    st.error(f"Failed to send to SAP: {response['message']}")
+                                    if "details" in response:
+                                        st.info(f"Details: {response['details']}")
             
             return edited_df
         else:

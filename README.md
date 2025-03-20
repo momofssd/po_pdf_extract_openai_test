@@ -396,9 +396,11 @@ def find_ship_to_number(customer_number, delivery_address, customer_master_data)
 - After identifying the customer, the system uses fuzzy matching to find the correct ship-to location
 - This enables accurate identification of the ship-to number required for SAP data entry
 
-## SAP Integration via Excel Export
+## SAP Integration Options
 
-### Purpose of Excel Export
+The application provides three methods for integrating with SAP:
+
+### 1. Excel Export for VBS Scripting
 
 The primary purpose of exporting data to Excel is to facilitate SAP ERP data entry through VBS scripting:
 
@@ -406,18 +408,154 @@ The primary purpose of exporting data to Excel is to facilitate SAP ERP data ent
 2. **No Direct SAP Connection Required**: This approach eliminates the need for complex SAP endpoint programming or EDI connections
 3. **Business User Empowerment**: Non-technical users can run the process end-to-end without IT support
 
-### Excel Export Format
+#### Excel Export Format
 
 The Excel export includes all extracted fields plus the matched customer and ship-to information:
 - Customer Number (matched from master data)
 - Ship To Number (matched from master data)
 - Purchase Order Number
 - Required Delivery Date
-- Material Number
-- Order Quantity
+- Customer Part Number (renamed from Material Number)
+- Order Quantity (renamed from Order Quantity in kg)
 - Other extracted fields
 
 This format provides all the necessary information for VBS scripts to perform automated data entry into SAP.
+
+### 2. ANSI X12 850 Format for SAP Integration
+
+For more direct integration with SAP, the application can generate data in the ANSI X12 850 (Purchase Order) standard format:
+
+1. **Standard Compliance**: Follows the ANSI X12 850 (Purchase Order) standard structure
+2. **SAP Integration Ready**: The generated file follows the format needed for SAP integration
+3. **Structured Data Format**: Organizes data into standard segments for reliable processing
+
+#### ANSI X12 850 Structure
+
+The generated file follows the standard ANSI X12 850 EDI format with the following segments:
+
+```
+ST*850*0001                 (Transaction Set Header)
+BEG*00*SA*PO12345**20250319 (Beginning of Purchase Order)
+N1*ST**92*SHIP456           (Ship-To Information)
+N1*BY**92*CUST123           (Buyer/Customer Information)
+DTM*002*20250325            (Required Delivery Date)
+PO1*1*50*KG***BP*PARTXYZ    (Purchase Order Line Item)
+CTT*1                       (Transaction Totals)
+SE*7*0001                   (Transaction Set Trailer)
+```
+
+Each segment serves a specific purpose:
+1. **ST**: Identifies the start of an 850 transaction set
+2. **BEG**: Contains purchase order type, PO number, and date
+3. **N1**: Name segments for ship-to and buyer information
+4. **DTM**: Date/time reference for required delivery
+5. **PO1**: Line item details including quantity, unit of measure, and part number
+6. **CTT**: Transaction totals (number of line items)
+7. **SE**: End of transaction set with segment count
+
+#### Using the ANSI X12 850 Feature
+
+To generate and download an ANSI X12 850 format file:
+
+1. Process your PDF purchase orders as normal
+2. Review and edit the extracted data if needed
+3. Click the "Download ANSI X12 850" button
+4. Use the downloaded file with your SAP integration processes
+
+Each row in the DataFrame is processed as a separate EDI transaction, making it suitable for both single and multi-line purchase orders. The generated file follows the standard EDI X12 850 format that can be directly used with SAP and other EDI-compatible systems.
+
+### 3. IDoc-XML Format for SAP Integration
+
+For direct integration with SAP's IDoc (Intermediate Document) system, the application can generate IDoc data in XML format:
+
+1. **SAP IDoc Standard**: Follows the SAP IDoc structure for purchase orders
+2. **XML Format**: Uses XML for better compatibility with modern systems
+3. **Direct SAP Import**: The generated XML file can be imported into SAP systems
+
+#### IDoc-XML Structure
+
+The generated file follows the SAP IDoc XML structure with the following segments:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ORDERS05>
+  <IDOC BEGIN="DOC1001">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST123</PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP456</PARTN>
+      <LIFNR>Vendor number at customer location</LIFNR>
+      <NAME1>Customer Name</NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>PO12345</BELNR>
+      <DATUM>20250319</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>50</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>PO12345</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250319</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250325</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST123</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>PARTXYZ</IDTNR>
+    </E1EDP19>
+  </IDOC>
+</ORDERS05>
+```
+
+Each segment corresponds to the IDoc guideline structure:
+1. **E1EDK01**: Header general data (Action, Currency)
+2. **E1EDK14**: Header organizational data (Order type is always "OR" as specified)
+3. **E1EDKA1**: Header partner information (Sold-to party, Ship-to party)
+4. **E1EDK02**: Header reference data (Customer PO number, date)
+5. **E1EDP01**: Item reference data (Item number, quantity, UOM)
+6. **E1EDP02**: Item reference data (Customer PO, item number)
+7. **E1EDP03**: Item date segment (Required delivery date)
+8. **E1EDPA1**: Item partner information (End user)
+9. **E1EDP19**: Item object identification (Customer part number)
+
+#### Using the IDoc-XML Feature
+
+To generate and download an IDoc-XML file:
+
+1. Process your PDF purchase orders as normal
+2. Review and edit the extracted data if needed
+3. Click the "Download IDoc-XML" button
+4. Import the downloaded XML file into your SAP system
+
+Each row in the DataFrame is processed as a separate IDoc record within the XML file, making it suitable for both single and multi-line purchase orders.
 
 ## Extending the Application
 
