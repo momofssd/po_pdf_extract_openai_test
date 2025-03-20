@@ -4,7 +4,7 @@ import re
 import json
 from fuzzywuzzy import process
 
-# Function to extract text from PDF
+## Function to extract text from PDF
 def extract_text_from_pdf(pdf_file):
     text = ""
     try:
