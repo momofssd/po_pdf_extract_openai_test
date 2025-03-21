@@ -1,10 +1,19 @@
 import streamlit as st
-from openai import OpenAI
+from openai import AzureOpenAI
+
+# Azure OpenAI Configuration
+AZURE_ENDPOINT = "https://momofssd1.openai.azure.com/"  # Your Azure OpenAI endpoint
+AZURE_DEPLOYMENT = "gpt-4o"  # Replace with your actual deployment name
+AZURE_API_VERSION = "2024-02-01"
 
 # Function to validate OpenAI API key
 def validate_api_key(openai_api_key):
     try:
-        client = OpenAI(api_key=openai_api_key)
+        client = AzureOpenAI(
+            api_key=openai_api_key,
+            api_version=AZURE_API_VERSION,
+            azure_endpoint=AZURE_ENDPOINT
+        )
         client.models.list()
         return True, "✅ API Key validated successfully!"
     except Exception as e:
@@ -12,10 +21,14 @@ def validate_api_key(openai_api_key):
 
 # Function to call OpenAI API for extraction
 def extract_data_from_text(pdf_text, openai_api_key, prompts):
-    client = OpenAI(api_key=openai_api_key)
+    client = AzureOpenAI(
+        api_key=openai_api_key,
+        api_version=AZURE_API_VERSION,
+        azure_endpoint=AZURE_ENDPOINT
+    )
     try:
         response = client.chat.completions.create(
-            model="gpt-4o",
+            model=AZURE_DEPLOYMENT,
             messages=prompts,
             temperature=0,
             top_p=0

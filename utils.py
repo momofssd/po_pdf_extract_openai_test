@@ -86,7 +86,7 @@ def find_customer_number(customer_name, customer_master_data):
     best_match = process.extractOne(customer_name, customer_dict.keys())
     
     # If match score is above threshold (adjust as needed)
-    if best_match and best_match[1] >= 70:  # 70% match threshold
+    if best_match and best_match[1] >= 90:  
         matched_customer_name = best_match[0]
         customer_number = customer_dict[matched_customer_name]
         return customer_number, matched_customer_name

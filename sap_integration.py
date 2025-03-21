@@ -75,14 +75,14 @@ def generate_idoc_xml_data(df):
         buffer.write('    <E1EDKA1>\n')
         buffer.write('      <PARVW>AG</PARVW>\n')
         buffer.write(f'      <PARTN>{customer_number}</PARTN>\n')
-        buffer.write('      <LIFNR>Vendor number at customer location</LIFNR>\n')
+        buffer.write('      <LIFNR></LIFNR>\n')
         buffer.write('    </E1EDKA1>\n')
         
         # E1EDKA1: Header partner info - Ship-to party
         buffer.write('    <E1EDKA1>\n')
         buffer.write('      <PARVW>WE</PARVW>\n')
         buffer.write(f'      <PARTN>{ship_to_number}</PARTN>\n')
-        buffer.write('      <LIFNR>Vendor number at customer location</LIFNR>\n')
+        buffer.write('      <LIFNR></LIFNR>\n')
         if customer_name:
             buffer.write(f'      <NAME1></NAME1>\n')
         buffer.write('    </E1EDKA1>\n')
@@ -91,7 +91,7 @@ def generate_idoc_xml_data(df):
         buffer.write('    <E1EDK02>\n')
         buffer.write('      <QUALF>001</QUALF>\n')
         buffer.write(f'      <BELNR>{po_number}</BELNR>\n')
-        buffer.write(f'      <DATUM>{formatted_delivery_date}</DATUM>\n')
+        buffer.write(f'      <DATUM>{datetime.datetime.now().strftime("%Y%m%d")}</DATUM>\n')
         buffer.write('    </E1EDK02>\n')
         
         # E1EDP01: Item reference data
@@ -106,7 +106,7 @@ def generate_idoc_xml_data(df):
         buffer.write('      <QUALF>001</QUALF>\n')
         buffer.write(f'      <BELNR>{po_number}</BELNR>\n')
         buffer.write('      <ZEILE>1</ZEILE>\n')  # Item number, using 1 as default
-        buffer.write(f'      <DATUM>{formatted_delivery_date}</DATUM>\n')
+        buffer.write(f'      <DATUM>{datetime.datetime.now().strftime("%Y%m%d")}</DATUM>\n')
         buffer.write('    </E1EDP02>\n')
         
         # E1EDP03: Item date segment - Customer RDD

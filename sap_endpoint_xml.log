@@ -15,13 +15,13 @@
     </E1EDK14>
     <E1EDKA1>
       <PARVW>AG</PARVW>
-      <PARTN>MAGA1</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN>CUST002</PARTN>
+      <LIFNR></LIFNR>
     </E1EDKA1>
     <E1EDKA1>
       <PARVW>WE</PARVW>
-      <PARTN>M1</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN>SHIP004</PARTN>
+      <LIFNR></LIFNR>
       <NAME1></NAME1>
     </E1EDKA1>
     <E1EDK02>
@@ -38,7 +38,7 @@
       <QUALF>001</QUALF>
       <BELNR>PO-4001</BELNR>
       <ZEILE>1</ZEILE>
-      <DATUM>20250401</DATUM>
+      <DATUM>20250320</DATUM>
     </E1EDP02>
     <E1EDP03>
       <IDDAT>002</IDDAT>
@@ -46,7 +46,7 @@
     </E1EDP03>
     <E1EDPA1>
       <PARVW>EN</PARVW>
-      <PARTN>MAGA1</PARTN>
+      <PARTN>CUST002</PARTN>
     </E1EDPA1>
     <E1EDP19>
       <QUALF>001</QUALF>
@@ -68,13 +68,13 @@
     </E1EDK14>
     <E1EDKA1>
       <PARVW>AG</PARVW>
-      <PARTN>MAGA2</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN></PARTN>
+      <LIFNR></LIFNR>
     </E1EDKA1>
     <E1EDKA1>
       <PARVW>WE</PARVW>
-      <PARTN>M3</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN></PARTN>
+      <LIFNR></LIFNR>
       <NAME1></NAME1>
     </E1EDKA1>
     <E1EDK02>
@@ -91,7 +91,7 @@
       <QUALF>001</QUALF>
       <BELNR>PO-4002</BELNR>
       <ZEILE>1</ZEILE>
-      <DATUM>20250405</DATUM>
+      <DATUM>20250320</DATUM>
     </E1EDP02>
     <E1EDP03>
       <IDDAT>002</IDDAT>
@@ -99,11 +99,435 @@
     </E1EDP03>
     <E1EDPA1>
       <PARVW>EN</PARVW>
-      <PARTN>MAGA2</PARTN>
+      <PARTN></PARTN>
     </E1EDPA1>
     <E1EDP19>
       <QUALF>001</QUALF>
       <IDTNR>DOGE-GEAR</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1002">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST001</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP002</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>PO-3003</BELNR>
+      <DATUM>20250320</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>500</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>PO-3003</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250320</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST001</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>VX-788</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1003">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST005</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <DATUM>20230501</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230501</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST005</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1820268</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1004">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST005</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <DATUM>20230529</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230529</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST005</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1820268</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1005">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST005</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP018</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <DATUM>20230522</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230522</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST005</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1901802</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1006">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262441</BELNR>
+      <DATUM>20250206</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262441</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250206</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1007">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262444</BELNR>
+      <DATUM>20250221</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262444</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250221</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1008">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262446</BELNR>
+      <DATUM>20250303</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262446</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250303</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  <IDOC BEGIN="DOC1009">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR></LIFNR>
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR></LIFNR>
+      <NAME1></NAME1>
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262447</BELNR>
+      <DATUM>20250303</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262447</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250303</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
     </E1EDP19>
   </IDOC>
 </ORDERS05>

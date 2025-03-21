@@ -1,11 +1,11 @@
-2025-03-20 00:11:25,824 - SAP-Endpoint - INFO - Log files reset for new request
-2025-03-20 00:11:25,824 - SAP-Endpoint - INFO - POST request received at /idoc
-2025-03-20 00:11:25,824 - SAP-Endpoint - INFO - Query parameters: {}
-2025-03-20 00:11:25,825 - SAP-Endpoint - INFO - Received XML data (see sap_endpoint_xml.log for complete XML)
-2025-03-20 00:11:25,825 - SAP-Endpoint - INFO - Number of IDOCs in XML: 2
-2025-03-20 00:11:25,826 - SAP-Endpoint - INFO - IDOC 1/2 - ID: DOC1000
-2025-03-20 00:11:25,826 - SAP-Endpoint - INFO -   IDOC XML Structure:
-2025-03-20 00:11:25,826 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1000">
+2025-03-20 20:40:15,681 - SAP-Endpoint - INFO - Log files reset for new request
+2025-03-20 20:40:15,682 - SAP-Endpoint - INFO - POST request received at /idoc
+2025-03-20 20:40:15,682 - SAP-Endpoint - INFO - Query parameters: {}
+2025-03-20 20:40:15,682 - SAP-Endpoint - INFO - Received XML data (see sap_endpoint_xml.log for complete XML)
+2025-03-20 20:40:15,683 - SAP-Endpoint - INFO - Number of IDOCs in XML: 10
+2025-03-20 20:40:15,683 - SAP-Endpoint - INFO - IDOC 1/10 - ID: DOC1000
+2025-03-20 20:40:15,683 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,684 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1000">
     <E1EDK01>
       <ACTION>0</ACTION>
       <CURRENCY>USD</CURRENCY>
@@ -20,13 +20,13 @@
     </E1EDK14>
     <E1EDKA1>
       <PARVW>AG</PARVW>
-      <PARTN>MAGA1</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN>CUST002</PARTN>
+      <LIFNR />
     </E1EDKA1>
     <E1EDKA1>
       <PARVW>WE</PARVW>
-      <PARTN>M1</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN>SHIP004</PARTN>
+      <LIFNR />
       <NAME1 />
     </E1EDKA1>
     <E1EDK02>
@@ -43,7 +43,7 @@
       <QUALF>001</QUALF>
       <BELNR>PO-4001</BELNR>
       <ZEILE>1</ZEILE>
-      <DATUM>20250401</DATUM>
+      <DATUM>20250320</DATUM>
     </E1EDP02>
     <E1EDP03>
       <IDDAT>002</IDDAT>
@@ -51,7 +51,7 @@
     </E1EDP03>
     <E1EDPA1>
       <PARVW>EN</PARVW>
-      <PARTN>MAGA1</PARTN>
+      <PARTN>CUST002</PARTN>
     </E1EDPA1>
     <E1EDP19>
       <QUALF>001</QUALF>
@@ -59,16 +59,16 @@
     </E1EDP19>
   </IDOC>
   
-2025-03-20 00:11:25,826 - SAP-Endpoint - INFO -   Key Fields Summary:
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     PO Number: PO-4001
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Customer: MAGA1
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Part Number: MAGA-001
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Quantity: 1000
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Delivery Date: 20250401
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -     Currency: USD
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO - IDOC 2/2 - ID: DOC1001
-2025-03-20 00:11:25,827 - SAP-Endpoint - INFO -   IDOC XML Structure:
-2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1001">
+2025-03-20 20:40:15,684 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,684 - SAP-Endpoint - INFO -     PO Number: PO-4001
+2025-03-20 20:40:15,685 - SAP-Endpoint - INFO -     Customer: CUST002
+2025-03-20 20:40:15,685 - SAP-Endpoint - INFO -     Part Number: MAGA-001
+2025-03-20 20:40:15,685 - SAP-Endpoint - INFO -     Quantity: 1000
+2025-03-20 20:40:15,685 - SAP-Endpoint - INFO -     Delivery Date: 20250401
+2025-03-20 20:40:15,685 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,686 - SAP-Endpoint - INFO - IDOC 2/10 - ID: DOC1001
+2025-03-20 20:40:15,686 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,686 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1001">
     <E1EDK01>
       <ACTION>0</ACTION>
       <CURRENCY>USD</CURRENCY>
@@ -83,13 +83,13 @@
     </E1EDK14>
     <E1EDKA1>
       <PARVW>AG</PARVW>
-      <PARTN>MAGA2</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN />
+      <LIFNR />
     </E1EDKA1>
     <E1EDKA1>
       <PARVW>WE</PARVW>
-      <PARTN>M3</PARTN>
-      <LIFNR>Vendor number at customer location</LIFNR>
+      <PARTN />
+      <LIFNR />
       <NAME1 />
     </E1EDKA1>
     <E1EDK02>
@@ -106,7 +106,7 @@
       <QUALF>001</QUALF>
       <BELNR>PO-4002</BELNR>
       <ZEILE>1</ZEILE>
-      <DATUM>20250405</DATUM>
+      <DATUM>20250320</DATUM>
     </E1EDP02>
     <E1EDP03>
       <IDDAT>002</IDDAT>
@@ -114,18 +114,522 @@
     </E1EDP03>
     <E1EDPA1>
       <PARVW>EN</PARVW>
-      <PARTN>MAGA2</PARTN>
+      <PARTN />
     </E1EDPA1>
     <E1EDP19>
       <QUALF>001</QUALF>
       <IDTNR>DOGE-GEAR</IDTNR>
     </E1EDP19>
   </IDOC>
+  
+2025-03-20 20:40:15,687 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,687 - SAP-Endpoint - INFO -     PO Number: PO-4002
+2025-03-20 20:40:15,687 - SAP-Endpoint - INFO -     Customer: N/A
+2025-03-20 20:40:15,687 - SAP-Endpoint - INFO -     Part Number: DOGE-GEAR
+2025-03-20 20:40:15,687 - SAP-Endpoint - INFO -     Quantity: 5000
+2025-03-20 20:40:15,688 - SAP-Endpoint - INFO -     Delivery Date: 20250405
+2025-03-20 20:40:15,688 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,688 - SAP-Endpoint - INFO - IDOC 3/10 - ID: DOC1002
+2025-03-20 20:40:15,688 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,688 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1002">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST001</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP002</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>PO-3003</BELNR>
+      <DATUM>20250320</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>500</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>PO-3003</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250320</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST001</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>VX-788</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-20 20:40:15,689 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,689 - SAP-Endpoint - INFO -     PO Number: PO-3003
+2025-03-20 20:40:15,689 - SAP-Endpoint - INFO -     Customer: CUST001
+2025-03-20 20:40:15,689 - SAP-Endpoint - INFO -     Part Number: VX-788
+2025-03-20 20:40:15,690 - SAP-Endpoint - INFO -     Quantity: 500
+2025-03-20 20:40:15,690 - SAP-Endpoint - INFO -     Delivery Date: 20250320
+2025-03-20 20:40:15,690 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,690 - SAP-Endpoint - INFO - IDOC 4/10 - ID: DOC1003
+2025-03-20 20:40:15,690 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,690 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1003">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST005</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <DATUM>20230501</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287663</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230501</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST005</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1820268</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-20 20:40:15,691 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,691 - SAP-Endpoint - INFO -     PO Number: 4287663
+2025-03-20 20:40:15,691 - SAP-Endpoint - INFO -     Customer: CUST005
+2025-03-20 20:40:15,691 - SAP-Endpoint - INFO -     Part Number: 1820268
+2025-03-20 20:40:15,691 - SAP-Endpoint - INFO -     Quantity: 88422
+2025-03-20 20:40:15,692 - SAP-Endpoint - INFO -     Delivery Date: 20230501
+2025-03-20 20:40:15,692 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,692 - SAP-Endpoint - INFO - IDOC 5/10 - ID: DOC1004
+2025-03-20 20:40:15,692 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,692 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1004">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST005</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <DATUM>20230529</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4287665</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230529</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST005</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1820268</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-20 20:40:15,693 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,693 - SAP-Endpoint - INFO -     PO Number: 4287665
+2025-03-20 20:40:15,693 - SAP-Endpoint - INFO -     Customer: CUST005
+2025-03-20 20:40:15,693 - SAP-Endpoint - INFO -     Part Number: 1820268
+2025-03-20 20:40:15,694 - SAP-Endpoint - INFO -     Quantity: 88422
+2025-03-20 20:40:15,694 - SAP-Endpoint - INFO -     Delivery Date: 20230529
+2025-03-20 20:40:15,694 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,694 - SAP-Endpoint - INFO - IDOC 6/10 - ID: DOC1005
+2025-03-20 20:40:15,695 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,695 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1005">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST005</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP018</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <DATUM>20230522</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>88422</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4290664</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20230522</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST005</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>1901802</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-20 20:40:15,696 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,696 - SAP-Endpoint - INFO -     PO Number: 4290664
+2025-03-20 20:40:15,696 - SAP-Endpoint - INFO -     Customer: CUST005
+2025-03-20 20:40:15,696 - SAP-Endpoint - INFO -     Part Number: 1901802
+2025-03-20 20:40:15,696 - SAP-Endpoint - INFO -     Quantity: 88422
+2025-03-20 20:40:15,696 - SAP-Endpoint - INFO -     Delivery Date: 20230522
+2025-03-20 20:40:15,697 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,697 - SAP-Endpoint - INFO - IDOC 7/10 - ID: DOC1006
+2025-03-20 20:40:15,697 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,697 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1006">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262441</BELNR>
+      <DATUM>20250206</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262441</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250206</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-20 20:40:15,698 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,698 - SAP-Endpoint - INFO -     PO Number: 4500262441
+2025-03-20 20:40:15,698 - SAP-Endpoint - INFO -     Customer: CUST006
+2025-03-20 20:40:15,698 - SAP-Endpoint - INFO -     Part Number: 4071251
+2025-03-20 20:40:15,698 - SAP-Endpoint - INFO -     Quantity: 18250
+2025-03-20 20:40:15,698 - SAP-Endpoint - INFO -     Delivery Date: 20250206
+2025-03-20 20:40:15,698 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,699 - SAP-Endpoint - INFO - IDOC 8/10 - ID: DOC1007
+2025-03-20 20:40:15,699 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,699 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1007">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262444</BELNR>
+      <DATUM>20250221</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262444</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250221</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO -     PO Number: 4500262444
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO -     Customer: CUST006
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO -     Part Number: 4071251
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO -     Quantity: 18250
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO -     Delivery Date: 20250221
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,700 - SAP-Endpoint - INFO - IDOC 9/10 - ID: DOC1008
+2025-03-20 20:40:15,701 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,701 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1008">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262446</BELNR>
+      <DATUM>20250303</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262446</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250303</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
+    </E1EDP19>
+  </IDOC>
+  
+2025-03-20 20:40:15,701 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,702 - SAP-Endpoint - INFO -     PO Number: 4500262446
+2025-03-20 20:40:15,702 - SAP-Endpoint - INFO -     Customer: CUST006
+2025-03-20 20:40:15,702 - SAP-Endpoint - INFO -     Part Number: 4071251
+2025-03-20 20:40:15,702 - SAP-Endpoint - INFO -     Quantity: 18250
+2025-03-20 20:40:15,702 - SAP-Endpoint - INFO -     Delivery Date: 20250303
+2025-03-20 20:40:15,702 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,702 - SAP-Endpoint - INFO - IDOC 10/10 - ID: DOC1009
+2025-03-20 20:40:15,703 - SAP-Endpoint - INFO -   IDOC XML Structure:
+2025-03-20 20:40:15,703 - SAP-Endpoint - INFO -   <IDOC BEGIN="DOC1009">
+    <E1EDK01>
+      <ACTION>0</ACTION>
+      <CURRENCY>USD</CURRENCY>
+    </E1EDK01>
+    <E1EDK14>
+      <QUALF>012</QUALF>
+      <ORGID>OR</ORGID>
+    </E1EDK14>
+    <E1EDK14>
+      <QUALF>019</QUALF>
+      <ORGID>B2B</ORGID>
+    </E1EDK14>
+    <E1EDKA1>
+      <PARVW>AG</PARVW>
+      <PARTN>CUST006</PARTN>
+      <LIFNR />
+    </E1EDKA1>
+    <E1EDKA1>
+      <PARVW>WE</PARVW>
+      <PARTN>SHIP017</PARTN>
+      <LIFNR />
+      <NAME1 />
+    </E1EDKA1>
+    <E1EDK02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262447</BELNR>
+      <DATUM>20250303</DATUM>
+    </E1EDK02>
+    <E1EDP01>
+      <POSEX>1</POSEX>
+      <MENGE>18250</MENGE>
+      <MENEE>KG</MENEE>
+    </E1EDP01>
+    <E1EDP02>
+      <QUALF>001</QUALF>
+      <BELNR>4500262447</BELNR>
+      <ZEILE>1</ZEILE>
+      <DATUM>20250320</DATUM>
+    </E1EDP02>
+    <E1EDP03>
+      <IDDAT>002</IDDAT>
+      <DATUM>20250303</DATUM>
+    </E1EDP03>
+    <E1EDPA1>
+      <PARVW>EN</PARVW>
+      <PARTN>CUST006</PARTN>
+    </E1EDPA1>
+    <E1EDP19>
+      <QUALF>001</QUALF>
+      <IDTNR>4071251</IDTNR>
+    </E1EDP19>
+  </IDOC>
 
-2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -   Key Fields Summary:
-2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -     PO Number: PO-4002
-2025-03-20 00:11:25,828 - SAP-Endpoint - INFO -     Customer: MAGA2
-2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Part Number: DOGE-GEAR
-2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Quantity: 5000
-2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Delivery Date: 20250405
-2025-03-20 00:11:25,829 - SAP-Endpoint - INFO -     Currency: USD
+2025-03-20 20:40:15,703 - SAP-Endpoint - INFO -   Key Fields Summary:
+2025-03-20 20:40:15,703 - SAP-Endpoint - INFO -     PO Number: 4500262447
+2025-03-20 20:40:15,704 - SAP-Endpoint - INFO -     Customer: CUST006
+2025-03-20 20:40:15,704 - SAP-Endpoint - INFO -     Part Number: 4071251
+2025-03-20 20:40:15,704 - SAP-Endpoint - INFO -     Quantity: 18250
+2025-03-20 20:40:15,704 - SAP-Endpoint - INFO -     Delivery Date: 20250303
+2025-03-20 20:40:15,704 - SAP-Endpoint - INFO -     Currency: USD
