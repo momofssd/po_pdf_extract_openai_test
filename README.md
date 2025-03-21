@@ -248,7 +248,7 @@ The Streamlit application provides a user-friendly interface with the following 
 streamlit run app.py
 ```
 
-The application will open in your default web browser, typically at http://localhost:8501.
+The application will open in your default web browser, typically at http://localhost:8502.
 
 ### Using the Application
 
