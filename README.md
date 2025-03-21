@@ -1,8 +1,25 @@
 # Streamlit PDF Purchase Order Extractor for SAP Integration
 
-A Streamlit-based web application for extracting and processing purchase order information from PDF documents. This application uses OpenAI's GPT-4o model to intelligently extract key information from purchase order PDFs, match it with customer master data, and export it in a format ready for SAP ERP data entry via EDI integration or scripting.
+A Streamlit-based web application for extracting and processing purchase order information from PDF documents. This application uses Azure OpenAI's GPT-4o model to intelligently extract key information from purchase order PDFs, match it with customer master data, and export it in a format ready for SAP ERP data entry via EDI integration or scripting.
 
 **Try the deployed application here: [https://poextrationopenai.streamlit.app/](https://poextrationopenai.streamlit.app/)**
+
+## Azure OpenAI Integration
+
+This application leverages Azure OpenAI Services rather than the standard OpenAI API, providing several advantages:
+
+- **Data Residency & Sovereignty**: Keep your data within specific geographic regions to meet compliance requirements
+- **Enterprise Security**: Leverage Azure's enterprise-grade security features, including private networking options
+- **Compliance**: Meet regulatory requirements with Azure's comprehensive compliance certifications
+- **Azure Integration**: Seamlessly integrate with other Azure services (Storage, Databases, Identity, etc.)
+- **SLAs**: Enterprise-grade service level agreements for production workloads
+- **Cost Management**: Manage costs through your existing Azure subscription and budgeting tools
+- **Content Filtering**: Additional content filtering options and controls
+
+Key configuration details:
+- **Azure Endpoint**: The application connects to your Azure OpenAI deployment endpoint
+- **Deployment Name**: Uses your specific model deployment in Azure OpenAI (default: gpt-4o)
+- **API Version**: Uses the Azure OpenAI API version 2024-02-01
 
 ## Business Value
 
@@ -23,11 +40,11 @@ This project has been modularized for better maintainability and consists of the
 1. **app.py**: The main Streamlit application entry point
 2. **utils.py**: Utility functions for PDF processing and display
 3. **data_processing.py**: Functions for data transformation and handling
-4. **api.py**: OpenAI API integration
+4. **api.py**: Azure OpenAI API integration
 5. **session_state.py**: Session state management
 6. **ui_components.py**: UI components and layout
 7. **processing.py**: Core processing logic
-8. **prompts.py**: Prompt engineering for OpenAI API
+8. **prompts.py**: Prompt engineering for Azure OpenAI API
 
 ## Application Structure
 
@@ -71,9 +88,9 @@ edited_df = display_data_and_downloads()
    - `convert_to_dataframe()`: Converts extracted data to pandas DataFrame
    - `process_api_response()`: Processes and cleans API responses
 
-3. **api.py**: Manages OpenAI API interactions
-   - `validate_api_key()`: Validates the OpenAI API key
-   - `extract_data_from_text()`: Calls the OpenAI API with the provided text
+3. **api.py**: Manages Azure OpenAI API interactions
+   - `validate_api_key()`: Validates the Azure OpenAI API key
+   - `extract_data_from_text()`: Calls the Azure OpenAI API with the provided text
 
 4. **session_state.py**: Manages Streamlit session state
    - `initialize_session_state()`: Sets up initial session state variables
@@ -86,14 +103,14 @@ edited_df = display_data_and_downloads()
 6. **processing.py**: Contains the core processing logic
    - `process_files()`: Processes uploaded files and extracts data
 
-7. **prompts.py**: Contains prompt engineering for OpenAI API
-   - `get_system_message()`: Returns the system message for the OpenAI API
-   - `get_multi_line_prompt()`: Returns the multi-line prompt for the OpenAI API
-   - `create_prompts()`: Creates the prompts for the OpenAI API
+7. **prompts.py**: Contains prompt engineering for Azure OpenAI API
+   - `get_system_message()`: Returns the system message for the Azure OpenAI API
+   - `get_multi_line_prompt()`: Returns the multi-line prompt for the Azure OpenAI API
+   - `create_prompts()`: Creates the prompts for the Azure OpenAI API
 
-## How It Works: OpenAI-Powered Extraction
+## How It Works: Azure OpenAI-Powered Extraction
 
-This system leverages OpenAI's GPT-4o model to extract relevant information from purchase order documents through a streamlined process:
+This system leverages Azure OpenAI's GPT-4o model to extract relevant information from purchase order documents through a streamlined process:
 
 ### 1. Text Extraction
 
@@ -123,18 +140,24 @@ def fix_number_format(text):
 - The extracted text undergoes preprocessing to fix common formatting issues
 - Number formats are standardized to ensure accurate extraction
 
-### 3. OpenAI API Integration
+### 3. Azure OpenAI API Integration
 
 ```python
+client = AzureOpenAI(
+    api_key=openai_api_key,
+    api_version=AZURE_API_VERSION,
+    azure_endpoint=AZURE_ENDPOINT
+)
+
 response = client.chat.completions.create(
-    model="gpt-4o",
+    model=AZURE_DEPLOYMENT,
     messages=prompts,
     temperature=0,
     top_p=0
 )
 ```
 
-- The preprocessed text is sent to OpenAI's GPT-4o model
+- The preprocessed text is sent to Azure OpenAI's GPT-4o model
 - A carefully crafted system prompt guides the model to extract specific fields
 - Temperature is set to 0 for deterministic outputs
 
@@ -167,7 +190,7 @@ The Streamlit application provides a user-friendly interface with the following 
 
 ### 1. API Key Management
 
-- Secure input for OpenAI API key
+- Secure input for Azure OpenAI API key
 - Validation to ensure the API key is valid
 - Session state management to maintain the key during the session
 
@@ -194,10 +217,10 @@ The Streamlit application provides a user-friendly interface with the following 
 - Python 3.7+
 - Streamlit
 - PyPDF2
-- OpenAI Python SDK
+- Azure OpenAI Python SDK
 - pandas
 - python-dotenv (for openAI_extraction.py)
-- Valid OpenAI API key with access to GPT-4o
+- Valid Azure OpenAI API key with access to GPT-4o
 
 ## Installation
 
@@ -212,9 +235,9 @@ The Streamlit application provides a user-friendly interface with the following 
    pip install -r requirements.txt
    ```
 
-3. For openAI_extraction.py, create a .env file with your OpenAI API key:
+3. For openAI_extraction.py, create a .env file with your Azure OpenAI API key:
    ```
-   OPENAI_API_KEY=your_api_key_here
+   AZURE_API_KEY=your_api_key_here
    ```
 
 ## Usage
@@ -229,7 +252,7 @@ The application will open in your default web browser, typically at http://local
 
 ### Using the Application
 
-1. Enter your OpenAI API key in the sidebar
+1. Enter your Azure OpenAI API key in the sidebar
 2. Click "Validate API Key" to verify the key
 3. Upload one or more PDF purchase orders
 4. Click "Process Files" to extract information
@@ -253,7 +276,7 @@ flowchart TD
     A[PDF Purchase Order] --> B[Upload to Streamlit App]
     B --> C[Extract Text from PDF]
     C --> D[Preprocess Text]
-    D --> E[OpenAI GPT-4o Processing]
+    D --> E[Azure OpenAI GPT-4o Processing]
     E --> F[JSON Response]
     F --> G[Parse & Validate Data]
     G --> H[Load Customer Master Data]
